@@ -57,8 +57,7 @@ Jika Anda bekerja dalam tim, pastikan untuk melakukan clone repository utama:
 
 ```bash
 # Ganti URL sesuai repo Anda
-git clone https://github.com/username/lab-manager.git
-cd lab-manager/client
+git clone https://github.com/febss20/SIMPEL-Lab-Frontend.git
 ```
 
 ### 2. Install Dependencies
