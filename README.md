@@ -1,70 +1,166 @@
-# Getting Started with Create React App
+# Lab Manager - Client (Frontend)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplikasi web manajemen laboratorium berbasis React, dengan antarmuka modern, responsif, dan profesional. Mendukung fitur manajemen laboratorium, peralatan, pengguna, peminjaman, serta laporan statistik lengkap untuk admin, teknisi, dan user.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Fitur Utama
 
-### `npm start`
+- **Manajemen Laboratorium**: Tambah, edit, hapus, dan lihat detail laboratorium.
+- **Manajemen Peralatan**: CRUD peralatan, detail lengkap, filter, ekspor CSV, dan tampilan modal modern.
+- **Manajemen Pengguna**: Kelola user, admin, teknisi, dengan role-based access control.
+- **Manajemen Peminjaman**: Proses peminjaman, approval, pengembalian, dan riwayat.
+- **Laporan & Statistik**: Visualisasi data (Chart.js), ekspor laporan, dan tab laporan interaktif.
+- **Profil Admin**: Edit profil, ganti password, dan avatar dinamis.
+- **UI/UX Modern**: Desain konsisten, animasi halus, warna kontras, dan aksesibilitas optimal.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Teknologi & Library
 
-### `npm test`
+- **React 19**
+- **Redux Toolkit** (state management)
+- **React Router v7** (routing)
+- **Tailwind CSS** (utility-first styling)
+- **Chart.js & react-chartjs-2** (visualisasi data)
+- **Axios** (HTTP client)
+- **Framer Motion** (animasi tambahan)
+- **Date-fns** (manipulasi tanggal)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 📁 Struktur Folder Utama
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+client/
+├── public/           # Static files (index.html, favicon, manifest, logo)
+├── src/
+│   ├── api/          # API service (axios)
+│   ├── components/   # Reusable UI components (PageHeader, Modal, IconButton, etc)
+│   ├── layouts/      # Layout components (DashboardLayout)
+│   ├── pages/        # Halaman aplikasi (admin, user, technician, auth)
+│   ├── store/        # Redux store & slices
+│   ├── styles/       # Custom CSS (animations, overrides)
+│   ├── utils/        # Helper & utility functions
+│   └── App.jsx       # Root app & routing
+├── package.json      # Dependencies & scripts
+└── README.md         # Dokumentasi ini
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚡️ Cara Menjalankan
 
-### `npm run eject`
+### 1. Clone Repository
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Jika Anda bekerja dalam tim, pastikan untuk melakukan clone repository utama:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Ganti URL sesuai repo Anda
+git clone https://github.com/username/lab-manager.git
+cd lab-manager/client
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2. Install Dependencies
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Jalankan perintah berikut untuk menginstall semua dependencies:
 
-## Learn More
+```bash
+npm install
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 3. Setup Environment (Opsional)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Jika ada file `.env` (misal untuk konfigurasi API endpoint), copy dari contoh:
 
-### Code Splitting
+```bash
+cp .env.example .env
+# Edit .env sesuai kebutuhan
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 4. Jalankan Aplikasi
 
-### Analyzing the Bundle Size
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000)
 
-### Making a Progressive Web App
+### 5. Build untuk Produksi
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm run build
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 👥 Kolaborasi Tim
 
-### Deployment
+- **Gunakan branch** untuk fitur/bugfix baru:  
+  `git checkout -b fitur/nama-fitur-anda`
+- **Pull request** ke branch utama (`main`/`master`) untuk review kode.
+- **Selalu lakukan pull** sebelum mulai kerja:
+  ```bash
+  git pull origin main
+  ```
+- **Commit message** yang jelas dan deskriptif.
+- **Resolusi konflik**: Jika ada konflik merge, diskusikan dan selesaikan bersama tim.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 🛠️ Troubleshooting
 
-### `npm run build` fails to minify
+- Jika ada error dependency, coba hapus `node_modules` dan `package-lock.json`, lalu jalankan `npm install` ulang.
+- Pastikan backend (server) juga berjalan jika aplikasi membutuhkan API.
+- Untuk masalah linting/formatting, gunakan perintah:
+  ```bash
+  npm run lint
+  # atau
+  npm run format
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 🖥️ Halaman Admin
+
+- **Dashboard**: Ringkasan statistik, chart, dan quick actions
+- **Manajemen Lab**: CRUD laboratorium
+- **Manajemen Peralatan**: CRUD, detail, filter, ekspor CSV
+- **Manajemen Pengguna**: CRUD user/admin/teknisi
+- **Manajemen Peminjaman**: Approval, pengembalian, detail
+- **Laporan**: Statistik visual, ekspor laporan
+- **Profil Admin**: Edit profil, ganti password
+
+## 🎨 UI/UX
+
+- Komponen header modern (`PageHeader`) di semua halaman
+- Modal detail & form dengan animasi smooth
+- Warna kontras, aksesibilitas tinggi
+- Layout responsif (desktop & mobile)
+
+## 🔒 Autentikasi & Role
+
+- Login, register, dan proteksi route berbasis role (Admin, User, Technician)
+- Komponen `RoleRoute` untuk akses halaman sesuai role
+
+## 📦 Ekspor Data
+
+- Ekspor data ke CSV di halaman manajemen dan laporan
+
+## 🧩 Komponen Penting
+
+- `PageHeader`: Header halaman modern dengan animasi & ikon
+- `Modal`: Modal dialog serbaguna
+- `IconButton`: Tombol aksi dengan ikon & tooltip
+
+---
+
+## 📚 Pengembangan Lanjutan
+
+- Tambahkan fitur notifikasi
+- Integrasi dengan backend (lihat folder `server`)
+- Penambahan test unit & e2e
+
+---
+
+## Lisensi
+
+MIT
