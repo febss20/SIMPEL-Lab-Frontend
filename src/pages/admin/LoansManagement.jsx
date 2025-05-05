@@ -5,6 +5,7 @@ import IconButton from '../../components/common/IconButton';
 import { getAllLoans, updateLoanStatus, deleteLoan } from '../../api/loans';
 import Modal from '../../components/common/Modal';
 import PageHeader from '../../components/common/PageHeader';
+import ConfirmModal from '../../components/common/ConfirmModal';
 
 const LoansManagement = () => {
   const [loans, setLoans] = useState([]);
@@ -17,6 +18,9 @@ const LoansManagement = () => {
   const [statusLoading, setStatusLoading] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [viewData, setViewData] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
   const statusOptions = ['PENDING', 'APPROVED', 'ACTIVE', 'RETURNED', 'REJECTED', 'OVERDUE'];
 
   const fetchLoans = async () => {
@@ -160,12 +164,22 @@ const LoansManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Yakin ingin menghapus peminjaman ini?')) return;
+    setConfirmDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!confirmDeleteId) return;
+    setDeleteLoading(true);
     try {
-      await deleteLoan(id);
+      await deleteLoan(confirmDeleteId);
+      setConfirmDeleteId(null);
+      setSuccessMsg('Peminjaman berhasil dihapus!');
       fetchLoans();
+      setTimeout(() => setSuccessMsg(''), 2000);
     } catch (err) {
-      alert('Gagal menghapus peminjaman');
+      setError('Gagal menghapus: ' + (err?.response?.data?.message || err.message));
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -183,9 +197,11 @@ const LoansManagement = () => {
     setStatusLoading(true);
     try {
       await handleUpdateStatus(showStatusModal, selectedStatus);
+      setSuccessMsg('Peminjaman berhasil diupdate!');
+      setTimeout(() => setSuccessMsg(''), 2000);
       closeStatusModal();
     } catch (err) {
-      alert('Gagal memperbarui status');
+      setError('Gagal update: ' + (err?.response?.data?.message || err.message));
     } finally {
       setStatusLoading(false);
     }
@@ -236,9 +252,17 @@ const LoansManagement = () => {
           </div>
         </div>
         {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+        {successMsg && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-300 flex items-center animate-slideDown">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            {successMsg}
+          </div>
+        )}
         <DataTable columns={columns} data={filteredLoans} isLoading={isLoading} />
         <Modal isOpen={!!showStatusModal} onClose={closeStatusModal} title="Update Status Peminjaman">
-          <form onSubmit={handleStatusSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleStatusSubmit} className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status Baru</label>
               <select
@@ -407,6 +431,16 @@ const LoansManagement = () => {
             </div>
           </div>
         )}
+        <ConfirmModal
+          isOpen={!!confirmDeleteId}
+          title="Konfirmasi Hapus"
+          message="Apakah Anda yakin ingin menghapus data peminjaman ini?"
+          confirmText="Ya, Hapus"
+          cancelText="Batal"
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmDeleteId(null)}
+          loading={deleteLoading}
+        />
       </div>
     </DashboardLayout>
   );

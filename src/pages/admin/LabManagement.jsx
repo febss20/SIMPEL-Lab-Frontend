@@ -4,6 +4,7 @@ import DataTable from '../../components/dashboard/DataTable';
 import IconButton from '../../components/common/IconButton';
 import { getAllLabs, createLab, updateLab, deleteLab } from '../../api/admin';
 import PageHeader from '../../components/common/PageHeader';
+import ConfirmModal from '../../components/common/ConfirmModal';
 
 const initialForm = {
   id: null,
@@ -24,6 +25,9 @@ const LabManagement = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [modalError, setModalError] = useState(null);
   const [search, setSearch] = useState('');
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
 
   const fetchLabs = async () => {
     setIsLoading(true);
@@ -70,6 +74,8 @@ const LabManagement = () => {
     try {
       if (isEdit) {
         await updateLab(form.id, form);
+        setSuccessMsg('Laboratorium berhasil diupdate!');
+        setTimeout(() => setSuccessMsg(''), 2000);
       } else {
         await createLab(form);
       }
@@ -77,16 +83,27 @@ const LabManagement = () => {
       fetchLabs();
     } catch (err) {
       setModalError(err?.response?.data?.message || 'Gagal menyimpan data');
+      if (isEdit) setError('Gagal update: ' + (err?.response?.data?.message || err.message));
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Yakin ingin menghapus laboratorium ini?')) return;
+    setConfirmDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!confirmDeleteId) return;
+    setDeleteLoading(true);
     try {
-      await deleteLab(id);
+      await deleteLab(confirmDeleteId);
+      setConfirmDeleteId(null);
+      setSuccessMsg('Laboratorium berhasil dihapus!');
       fetchLabs();
+      setTimeout(() => setSuccessMsg(''), 2000);
     } catch (err) {
-      alert('Gagal menghapus laboratorium');
+      setError('Gagal menghapus: ' + (err?.response?.data?.message || err.message));
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -191,12 +208,20 @@ const LabManagement = () => {
           </div>
         </div>
         {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+        {successMsg && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-300 flex items-center animate-slideDown">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            {successMsg}
+          </div>
+        )}
         <DataTable columns={columns} data={filteredLabs} isLoading={isLoading} />
       </div>
       {/* Modal Form */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fadeIn">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md max-h-[80vh] overflow-y-auto animate-fadeIn">
             <h2 className="text-xl font-semibold mb-4">{isEdit ? 'Edit Lab' : 'Tambah Lab'}</h2>
             {modalError && <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-2">{modalError}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -236,6 +261,16 @@ const LabManagement = () => {
           </div>
         </div>
       )}
+      <ConfirmModal
+        isOpen={!!confirmDeleteId}
+        title="Konfirmasi Hapus"
+        message="Apakah Anda yakin ingin menghapus laboratorium ini?"
+        confirmText="Ya, Hapus"
+        cancelText="Batal"
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmDeleteId(null)}
+        loading={deleteLoading}
+      />
     </DashboardLayout>
   );
 };

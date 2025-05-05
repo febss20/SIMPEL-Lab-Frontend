@@ -5,6 +5,7 @@ import { getAllRepairs, updateRepair, deleteRepair } from '../../api/repairs';
 import '../../utils/animations.css';
 import IconButton from '../../components/common/IconButton';
 import { Link } from 'react-router-dom';
+import ConfirmModal from '../../components/common/ConfirmModal';
 
 const RepairTasks = () => {
   const [repairs, setRepairs] = useState([]);
@@ -20,6 +21,8 @@ const RepairTasks = () => {
   const [editRepair, setEditRepair] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ status: '', description: '', notes: '' });
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -155,12 +158,16 @@ const RepairTasks = () => {
   };
 
   const handleDelete = async (id) => {
-    setError('');
-    setSuccessMsg('');
-    if (!window.confirm('Yakin ingin menghapus repair ini?')) return;
+    setConfirmDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!confirmDeleteId) return;
     setLoadingAction(true);
+    setDeleteLoading(true);
     try {
-      await deleteRepair(id);
+      await deleteRepair(confirmDeleteId);
+      setConfirmDeleteId(null);
       setSuccessMsg('Repair berhasil dihapus!');
       await fetchAll();
       setTimeout(() => setSuccessMsg(''), 2000);
@@ -168,6 +175,7 @@ const RepairTasks = () => {
       setError('Gagal menghapus: ' + (err.response?.data?.message || err.message));
     } finally {
       setLoadingAction(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -559,6 +567,16 @@ const RepairTasks = () => {
             </div>
           </div>
         )}
+        <ConfirmModal
+          isOpen={!!confirmDeleteId}
+          title="Konfirmasi Hapus"
+          message="Apakah Anda yakin ingin menghapus repair ini?"
+          confirmText="Ya, Hapus"
+          cancelText="Batal"
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmDeleteId(null)}
+          loading={deleteLoading}
+        />
       </div>
     </DashboardLayout>
   );
