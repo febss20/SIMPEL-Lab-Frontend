@@ -1,45 +1,23 @@
 import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import DataTable from '../../components/dashboard/DataTable';
-import IconButton from '../../components/common/IconButton';
-import { getAllUsers, createUser, updateUser, deleteUser } from '../../api/admin';
-import PageHeader from '../../components/common/PageHeader';
-import ConfirmModal from '../../components/common/ConfirmModal';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import DataTable from '../../../components/dashboard/DataTable';
+import IconButton from '../../../components/common/IconButton';
+import { getAllLabs, createLab, updateLab, deleteLab } from '../../../api/admin';
+import PageHeader from '../../../components/common/PageHeader';
+import ConfirmModal from '../../../components/common/ConfirmModal';
 
 const initialForm = {
   id: null,
-  username: '',
-  email: '',
-  fullName: '',
-  role: 'USER',
-  password: '',
+  name: '',
+  location: '',
+  description: '',
+  capacity: '',
   createdAt: '',
   updatedAt: '',
 };
 
-const exportToCSV = (data) => {
-  const header = ['ID', 'Username', 'Email', 'Nama Lengkap', 'Role', 'Dibuat', 'Diubah'];
-  const rows = data.map(u => [
-    u.id,
-    u.username,
-    u.email,
-    u.fullName || '',
-    u.role,
-    u.createdAt ? new Date(u.createdAt).toLocaleString('id-ID') : '-',
-    u.updatedAt ? new Date(u.updatedAt).toLocaleString('id-ID') : '-'
-  ]);
-  const csvContent = [header, ...rows].map(e => e.map(v => `"${v}"`).join(',')).join('\n');
-  const blob = new Blob([csvContent], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'users_management.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-};
-
-const UsersManagement = () => {
-  const [users, setUsers] = useState([]);
+const LabManagement = () => {
+  const [labs, setLabs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -47,31 +25,30 @@ const UsersManagement = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [modalError, setModalError] = useState(null);
   const [search, setSearch] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const fetchUsers = async () => {
+  const fetchLabs = async () => {
     setIsLoading(true);
     try {
-      const data = await getAllUsers();
-      setUsers(data);
+      const data = await getAllLabs();
+      setLabs(data);
     } catch (err) {
-      setError('Gagal memuat data pengguna');
+      setError('Gagal memuat data laboratorium');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchLabs();
   }, []);
 
-  const handleOpenModal = (user = null) => {
+  const handleOpenModal = (item = null) => {
     setModalError(null);
-    if (user) {
-      setForm({ ...user, password: '' });
+    if (item) {
+      setForm({ ...item });
       setIsEdit(true);
     } else {
       setForm(initialForm);
@@ -96,14 +73,14 @@ const UsersManagement = () => {
     setModalError(null);
     try {
       if (isEdit) {
-        await updateUser(form.id, form);
-        setSuccessMsg('Pengguna berhasil diupdate!');
+        await updateLab(form.id, form);
+        setSuccessMsg('Laboratorium berhasil diupdate!');
         setTimeout(() => setSuccessMsg(''), 2000);
       } else {
-        await createUser(form);
+        await createLab(form);
       }
       handleCloseModal();
-      fetchUsers();
+      fetchLabs();
     } catch (err) {
       setModalError(err?.response?.data?.message || 'Gagal menyimpan data');
       if (isEdit) setError('Gagal update: ' + (err?.response?.data?.message || err.message));
@@ -118,10 +95,10 @@ const UsersManagement = () => {
     if (!confirmDeleteId) return;
     setDeleteLoading(true);
     try {
-      await deleteUser(confirmDeleteId);
+      await deleteLab(confirmDeleteId);
       setConfirmDeleteId(null);
-      setSuccessMsg('Pengguna berhasil dihapus!');
-      fetchUsers();
+      setSuccessMsg('Laboratorium berhasil dihapus!');
+      fetchLabs();
       setTimeout(() => setSuccessMsg(''), 2000);
     } catch (err) {
       setError('Gagal menghapus: ' + (err?.response?.data?.message || err.message));
@@ -130,33 +107,41 @@ const UsersManagement = () => {
     }
   };
 
-  const filteredUsers = users.filter(u => {
-    const matchRole = roleFilter ? u.role === roleFilter : true;
-    const matchSearch = search
-      ? (
-          u.username?.toLowerCase().includes(search.toLowerCase()) ||
-          u.email?.toLowerCase().includes(search.toLowerCase()) ||
-          (u.fullName || '').toLowerCase().includes(search.toLowerCase())
-        )
-      : true;
-    return matchRole && matchSearch;
-  });
+  const exportToCSV = () => {
+    const headers = ['ID', 'Nama Lab', 'Lokasi', 'Deskripsi', 'Kapasitas', 'Dibuat', 'Diubah'];
+    const rows = filteredLabs.map(item => [
+      item.id,
+      item.name,
+      item.location,
+      item.description || '-',
+      item.capacity,
+      item.createdAt ? new Date(item.createdAt).toLocaleString('id-ID') : '-',
+      item.updatedAt ? new Date(item.updatedAt).toLocaleString('id-ID') : '-'
+    ]);
+    let csvContent = 'data:text/csv;charset=utf-8,' +
+      headers.join(',') + '\n' +
+      rows.map(e => e.map(v => '"' + (v ?? '') + '"').join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'labs_management.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
+  const filteredLabs = labs.filter(item => (
+    item.name.toLowerCase().includes(search.toLowerCase()) ||
+    (item.location || '').toLowerCase().includes(search.toLowerCase()) ||
+    String(item.capacity || '').toLowerCase().includes(search.toLowerCase())
+  ));
 
   const columns = [
     { id: 'id', header: 'ID', sortable: true },
-    { id: 'username', header: 'Username', sortable: true },
-    { id: 'email', header: 'Email', sortable: true },
-    { id: 'fullName', header: 'Nama Lengkap', sortable: true },
-    { 
-      id: 'role', 
-      header: 'Role', 
-      sortable: true,
-      render: row => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleBadgeClass(row.role)}`}>
-          {row.role}
-        </span>
-      )
-    },
+    { id: 'name', header: 'Nama Lab', sortable: true },
+    { id: 'location', header: 'Lokasi', sortable: true },
+    { id: 'description', header: 'Deskripsi', sortable: true },
+    { id: 'capacity', header: 'Kapasitas', sortable: true },
     { id: 'createdAt', header: 'Dibuat', sortable: true, render: row => row.createdAt ? new Date(row.createdAt).toLocaleString('id-ID') : '-' },
     { id: 'updatedAt', header: 'Diubah', sortable: true, render: row => row.updatedAt ? new Date(row.updatedAt).toLocaleString('id-ID') : '-' },
     {
@@ -182,52 +167,29 @@ const UsersManagement = () => {
     }
   ];
 
-  const getRoleBadgeClass = (role) => {
-    switch (role) {
-      case 'ADMIN':
-        return 'bg-indigo-100 text-indigo-800';
-      case 'TECHNICIAN':
-        return 'bg-purple-100 text-purple-800';
-      case 'USER':
-        return 'bg-blue-100 text-blue-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   return (
     <DashboardLayout>
       <div className="px-4 py-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
           <PageHeader 
-            title="Manajemen Pengguna" 
+            title="Manajemen Laboratorium" 
             icon={
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
               </svg>
             }
           />
-          <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center">
+          <div className="flex gap-2 items-center">
             <input
               type="text"
-              placeholder="Cari username, email, nama..."
-              className="border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+              placeholder="Cari lab..."
               value={search}
               onChange={e => setSearch(e.target.value)}
+              className="border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
-            <select
-              className="border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
-              value={roleFilter}
-              onChange={e => setRoleFilter(e.target.value)}
-            >
-              <option value="">Semua Role</option>
-              <option value="USER">User</option>
-              <option value="ADMIN">Admin</option>
-              <option value="TECHNICIAN">Technician</option>
-            </select>
             <button
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-1 transition-colors"
-              onClick={() => exportToCSV(filteredUsers)}
+              onClick={exportToCSV}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -241,7 +203,7 @@ const UsersManagement = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
               </svg>
-              Tambah Pengguna
+              Lab Baru
             </button>
           </div>
         </div>
@@ -254,39 +216,30 @@ const UsersManagement = () => {
             {successMsg}
           </div>
         )}
-        <DataTable columns={columns} data={filteredUsers} isLoading={isLoading} />
+        <DataTable columns={columns} data={filteredLabs} isLoading={isLoading} />
       </div>
+      {/* Modal Form */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 backdrop-blur-sm">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md max-h-[80vh] overflow-y-auto animate-fadeIn">
-            <h2 className="text-xl font-semibold mb-4">{isEdit ? 'Edit Pengguna' : 'Tambah Pengguna'}</h2>
+            <h2 className="text-xl font-semibold mb-4">{isEdit ? 'Edit Lab' : 'Tambah Lab'}</h2>
             {modalError && <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-2">{modalError}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">Username</label>
-                <input type="text" name="username" value={form.username} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" required />
+                <label className="block mb-1 text-sm font-medium text-gray-700">Nama Lab</label>
+                <input type="text" name="name" value={form.name} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
               </div>
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" value={form.email} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" required />
+                <label className="block mb-1 text-sm font-medium text-gray-700">Lokasi</label>
+                <input type="text" name="location" value={form.location} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
               </div>
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">Nama Lengkap</label>
-                <input type="text" name="fullName" value={form.fullName} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" />
+                <label className="block mb-1 text-sm font-medium text-gray-700">Deskripsi</label>
+                <textarea name="description" value={form.description} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" rows={2} />
               </div>
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">Role</label>
-                <select name="role" value={form.role} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                  <option value="USER">User</option>
-                  <option value="ADMIN">Admin</option>
-                  <option value="TECHNICIAN">Technician</option>
-                </select>
-              </div>
-              <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">
-                  Password {isEdit && <span className="text-xs text-gray-500">(Kosongkan jika tidak ingin mengubah)</span>}
-                </label>
-                <input type="password" name="password" value={form.password} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" autoComplete="new-password" required={!isEdit} />
+                <label className="block mb-1 text-sm font-medium text-gray-700">Kapasitas</label>
+                <input type="number" name="capacity" value={form.capacity} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" min="0" />
               </div>
               {isEdit && (
                 <>
@@ -311,7 +264,7 @@ const UsersManagement = () => {
       <ConfirmModal
         isOpen={!!confirmDeleteId}
         title="Konfirmasi Hapus"
-        message="Apakah Anda yakin ingin menghapus user ini?"
+        message="Apakah Anda yakin ingin menghapus laboratorium ini?"
         confirmText="Ya, Hapus"
         cancelText="Batal"
         onConfirm={confirmDelete}
@@ -322,4 +275,4 @@ const UsersManagement = () => {
   );
 };
 
-export default UsersManagement; 
+export default LabManagement; 

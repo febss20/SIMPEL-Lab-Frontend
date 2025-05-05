@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import api from '../../api/axios';
-import Modal from '../../components/common/Modal';
-import PageHeader from '../../components/common/PageHeader';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import api from '../../../api/axios';
+import Modal from '../../../components/common/Modal';
+import PageHeader from '../../../components/common/PageHeader';
 
 const AdminProfile = () => {
   const [profile, setProfile] = useState(null);

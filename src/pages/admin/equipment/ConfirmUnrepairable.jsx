@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import DataTable from '../../components/dashboard/DataTable';
-import { getAllRepairs, confirmUnrepairableRepair } from '../../api/repairs';
-import PageHeader from '../../components/common/PageHeader';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import DataTable from '../../../components/dashboard/DataTable';
+import { getAllRepairs, confirmUnrepairableRepair } from '../../../api/repairs';
+import PageHeader from '../../../components/common/PageHeader';
 
 const ConfirmUnrepairable = () => {
   const [repairs, setRepairs] = useState([]);
