@@ -1,156 +1,34 @@
-import { useState, useEffect } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import { getAllSpareParts, createSparePart, updateSparePart, deleteSparePart } from '../../api/spareparts';
-import { getAllMaintenance } from '../../api/maintenance';
-import '../../utils/animations.css'; 
-import IconButton from '../../components/common/IconButton';
-import ConfirmModal from '../../components/common/ConfirmModal';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import '../../../utils/animations.css';
+import IconButton from '../../../components/common/IconButton';
+import ConfirmModal from '../../../components/common/ConfirmModal';
+import SparePartModal from '../../../components/technician/spareparts/SparePartModal';
+import useSparePartsInventory from '../../../hooks/technician/useSparePartsInventory';
 
 const SparePartsInventory = () => {
-  const [spareParts, setSpareParts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentSparePart, setCurrentSparePart] = useState(null);
-  const [formData, setFormData] = useState({
-    maintenanceTaskId: '',
-    name: '',
-    partNumber: '',
-    quantity: 1,
-    replacementDate: '',
-    notes: ''
-  });
-  const [maintenanceTasks, setMaintenanceTasks] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-
-  useEffect(() => {
-    fetchSpareParts();
-    fetchMaintenanceTasks();
-  }, []);
-
-  const fetchSpareParts = async () => {
-    try {
-      setIsLoading(true);
-      const data = await getAllSpareParts();
-      setSpareParts(data);
-      setError(null);
-    } catch (err) {
-      setError('Failed to load spare parts data');
-      setSpareParts([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchMaintenanceTasks = async () => {
-    try {
-      const data = await getAllMaintenance();
-      setMaintenanceTasks(data);
-    } catch (err) {
-      setMaintenanceTasks([]);
-    }
-  };
-
-  const handleOpenModal = (sparePart = null) => {
-    if (sparePart) {
-      setCurrentSparePart(sparePart);
-      setFormData({
-        maintenanceTaskId: sparePart.maintenanceTaskId || '',
-        name: sparePart.name || '',
-        partNumber: sparePart.partNumber || '',
-        quantity: sparePart.quantity || 1,
-        replacementDate: sparePart.replacementDate ? sparePart.replacementDate.split('T')[0] : '',
-        notes: sparePart.notes || ''
-      });
-    } else {
-      setCurrentSparePart(null);
-      setFormData({
-        maintenanceTaskId: '',
-        name: '',
-        partNumber: '',
-        quantity: 1,
-        replacementDate: '',
-        notes: ''
-      });
-    }
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setCurrentSparePart(null);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    let parsedValue = value;
-    if (name === 'quantity') {
-      parsedValue = parseInt(value, 10) || 1;
-    }
-    setFormData({
-      ...formData,
-      [name]: parsedValue
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const payload = {
-        maintenanceTaskId: Number(formData.maintenanceTaskId),
-        name: formData.name,
-        partNumber: formData.partNumber,
-        quantity: Number(formData.quantity),
-        replacementDate: formData.replacementDate ? new Date(formData.replacementDate) : undefined,
-        notes: formData.notes
-      };
-      if (currentSparePart) {
-        await updateSparePart(currentSparePart.id, payload);
-        setSuccessMessage('Spare part berhasil diperbarui!');
-      } else {
-        await createSparePart(payload);
-        setSuccessMessage('Spare part baru berhasil ditambahkan!');
-      }
-      handleCloseModal();
-      fetchSpareParts();
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (err) {
-      setError(`Failed to ${currentSparePart ? 'update' : 'create'} spare part`);
-      setTimeout(() => setError(null), 3000);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    setConfirmDeleteId(id);
-  };
-
-  const confirmDelete = async () => {
-    if (!confirmDeleteId) return;
-    setDeleteLoading(true);
-    try {
-      await deleteSparePart(confirmDeleteId);
-      setConfirmDeleteId(null);
-      setSuccessMessage('Spare part berhasil dihapus!');
-      fetchSpareParts();
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (err) {
-      setError('Gagal menghapus Spare part');
-      setTimeout(() => setError(null), 3000);
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
-
-  const filteredSpareParts = spareParts.filter(part => {
-    const matchesSearch =
-      part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (part.partNumber || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (part.notes || '').toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
-  });
+  const {
+    spareParts,
+    isLoading,
+    error,
+    isModalOpen,
+    currentSparePart,
+    formData,
+    maintenanceTasks,
+    searchTerm,
+    setSearchTerm,
+    successMessage,
+    loadingAction,
+    handleOpenModal,
+    handleCloseModal,
+    handleChange,
+    handleSubmit,
+    handleDelete,
+    confirmDelete,
+    confirmDeleteId,
+    setConfirmDeleteId,
+    deleteLoading,
+    filteredSpareParts,
+  } = useSparePartsInventory();
 
   if (isLoading) {
     return (
@@ -391,137 +269,16 @@ const SparePartsInventory = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-          <div className="inline-block align-middle bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full animate-scaleIn">
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-white flex items-center">
-                {currentSparePart ? (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    Edit Spare part
-                  </>
-                ) : (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Tambah Spare part
-                  </>
-                )}
-              </h3>
-              <button 
-                onClick={handleCloseModal} 
-                className="text-white hover:text-gray-200 transition-colors"
-                aria-label="Close modal"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleSubmit} className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Maintenance Task</label>
-                  <select
-                    name="maintenanceTaskId"
-                    value={formData.maintenanceTaskId}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
-                    required
-                  >
-                    <option value="">Pilih Maintenance Task</option>
-                    {maintenanceTasks.map((task) => (
-                      <option key={task.id} value={task.id}>{task.description}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nama Spare part</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
-                    required
-                    placeholder="e.g. LCD Screen"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nomor Spare part</label>
-                  <input
-                    type="text"
-                    name="partNumber"
-                    value={formData.partNumber}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
-                    placeholder="e.g. LCD-156-HD"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                  <input
-                    type="number"
-                    name="quantity"
-                    value={formData.quantity}
-                    onChange={handleChange}
-                    min="1"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Penggantian</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <input
-                      type="date"
-                      name="replacementDate"
-                      value={formData.replacementDate}
-                      onChange={handleChange}
-                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                  <textarea
-                    name="notes"
-                    value={formData.notes}
-                    onChange={handleChange}
-                    rows="3"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
-                    placeholder="Informasi tambahan tentang Spare part ini..."
-                  ></textarea>
-                </div>
-              </div>
-              <div className="flex justify-end space-x-3 border-t border-gray-200 pt-5">
-                <button 
-                  type="button" 
-                  onClick={handleCloseModal} 
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition-all"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition-all btn-pulse"
-                >
-                  {currentSparePart ? 'Update' : 'Save'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <SparePartModal
+        isOpen={isModalOpen}
+        form={formData}
+        onChange={handleChange}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        loading={loadingAction}
+        maintenanceTasks={maintenanceTasks}
+        isEdit={!!currentSparePart}
+      />
       <ConfirmModal
         isOpen={!!confirmDeleteId}
         title="Konfirmasi Hapus"

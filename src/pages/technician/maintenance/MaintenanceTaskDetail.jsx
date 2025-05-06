@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import { getMaintenanceById } from '../../api/maintenance';
-import '../../utils/animations.css';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import { getMaintenanceById } from '../../../api/maintenance';
+import '../../../utils/animations.css';
 
 const MaintenanceTaskDetail = () => {
   const { id } = useParams();

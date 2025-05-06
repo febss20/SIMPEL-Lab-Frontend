@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import { getRepairById } from '../../api/repairs';
-import api from '../../api/axios';
-import '../../utils/animations.css';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import { getRepairById } from '../../../api/repairs';
+import api from '../../../api/axios';
+import '../../../utils/animations.css';
 
 const RepairDetail = () => {
   const { id } = useParams();

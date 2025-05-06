@@ -1,74 +1,33 @@
-import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import { getAllEquipment, getAllLabs } from '../../api/admin';
-import { createMaintenance } from '../../api/maintenance';
-import '../../utils/animations.css';  
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
 import { Link } from 'react-router-dom';
+import '../../../utils/animations.css';
+import EquipmentMaintenanceModal from '../../../components/technician/equipment/EquipmentMaintenanceModal';
+import useEquipmentOverview from '../../../hooks/technician/useEquipmentOverview';
 
 const EquipmentOverview = () => {
-  const [equipment, setEquipment] = useState([]);
-  const [labs, setLabs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [labFilter, setLabFilter] = useState('');
-  const [showMaintenanceModal, setShowMaintenanceModal] = useState(null);
-  const [maintenanceForm, setMaintenanceForm] = useState({
-    scheduledDate: '',
-    description: '',
-    isPeriodic: false,
-    notes: ''
-  });
-  const [formError, setFormError] = useState('');
-  const [loadingAction, setLoadingAction] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
-  const [stats, setStats] = useState({
-    available: 0,
-    inUse: 0,
-    maintenance: 0,
-    underRepair: 0,
-    inactive: 0
-  });
-
-  const fetchEquipment = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await getAllEquipment();
-      setEquipment(res);
-      
-      const available = res.filter(item => item.status === 'AVAILABLE').length;
-      const inUse = res.filter(item => item.status === 'IN_USE').length;
-      const maintenance = res.filter(item => item.status === 'UNDER_MAINTENANCE').length;
-      const underRepair = res.filter(item => item.status === 'UNDER_REPAIR').length;
-      const inactive = res.filter(item => item.status === 'INACTIVE').length;
-      
-      setStats({
-        available,
-        inUse,
-        maintenance,
-        underRepair,
-        inactive
-      });
-    } catch (err) {
-      setError('Gagal memuat data peralatan');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchLabs = async () => {
-    try {
-      const res = await getAllLabs();
-      setLabs(res);
-    } catch {}
-  };
-
-  useEffect(() => {
-    fetchEquipment();
-    fetchLabs();
-  }, []);
+  const {
+    equipment,
+    labs,
+    loading,
+    error,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    labFilter,
+    setLabFilter,
+    showMaintenanceModal,
+    setShowMaintenanceModal,
+    maintenanceForm,
+    setMaintenanceForm,
+    handleOpenMaintenanceModal,
+    handleMaintenanceSubmit,
+    loadingAction,
+    formError,
+    successMsg,
+    stats,
+    filteredEquipment,
+  } = useEquipmentOverview();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -84,7 +43,7 @@ const EquipmentOverview = () => {
         return 'text-gray-600 bg-gray-100';
     }
   };
-  
+
   const getStatusIcon = (status) => {
     switch (status) {
       case 'AVAILABLE':
@@ -120,49 +79,6 @@ const EquipmentOverview = () => {
         );
       default:
         return null;
-    }
-  };
-
-  const filteredEquipment = equipment.filter(eq => {
-    const matchesSearch = eq.name.toLowerCase().includes(search.toLowerCase()) || (eq.type?.toLowerCase().includes(search.toLowerCase()));
-    const matchesStatus = statusFilter ? eq.status === statusFilter : true;
-    const matchesLab = labFilter ? (
-        String(eq.labId) === String(labFilter) || String(eq.lab?.id) === String(labFilter)
-      ) : true;
-    return matchesSearch && matchesStatus && matchesLab;
-  });
-
-  const handleOpenMaintenanceModal = (equipmentId) => {
-    setShowMaintenanceModal(equipmentId);
-    setMaintenanceForm({ scheduledDate: '', description: '', isPeriodic: false, notes: '' });
-    setFormError('');
-  };
-
-  const handleMaintenanceSubmit = async (e) => {
-    e.preventDefault();
-    setFormError('');
-    if (!maintenanceForm.scheduledDate || !maintenanceForm.description) {
-      setFormError('Tanggal dan deskripsi wajib diisi.');
-      return;
-    }
-    setLoadingAction(true);
-    try {
-      await createMaintenance({
-        equipmentId: showMaintenanceModal,
-        scheduledDate: maintenanceForm.scheduledDate,
-        description: maintenanceForm.description,
-        isPeriodic: maintenanceForm.isPeriodic,
-        notes: maintenanceForm.notes
-      });
-      setShowMaintenanceModal(null);
-      setMaintenanceForm({ scheduledDate: '', description: '', isPeriodic: false, notes: '' });
-      setSuccessMsg('Maintenance berhasil dijadwalkan!');
-      fetchEquipment();
-      setTimeout(() => setSuccessMsg(''), 3000);
-    } catch (err) {
-      setFormError('Gagal menjadwalkan maintenance: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
     }
   };
 
@@ -441,72 +357,15 @@ const EquipmentOverview = () => {
       </div>
 
       {/* Modal Jadwalkan Maintenance */}
-      {showMaintenanceModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fadeIn">
-            <h2 className="text-lg font-semibold mb-4">Jadwalkan Maintenance</h2>
-            <form onSubmit={handleMaintenanceSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Tanggal Maintenance</label>
-                <input
-                  type="date"
-                  className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                  value={maintenanceForm.scheduledDate}
-                  onChange={e => setMaintenanceForm(f => ({ ...f, scheduledDate: e.target.value }))}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Deskripsi</label>
-                <textarea
-                  className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                  value={maintenanceForm.description}
-                  onChange={e => setMaintenanceForm(f => ({ ...f, description: e.target.value }))}
-                  required
-                />
-              </div>
-              <div>
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox"
-                    checked={maintenanceForm.isPeriodic}
-                    onChange={e => setMaintenanceForm(f => ({ ...f, isPeriodic: e.target.checked }))}
-                  />
-                  <span className="ml-2">Maintenance Berkala</span>
-                </label>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Catatan (opsional)</label>
-                <input
-                  type="text"
-                  className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                  value={maintenanceForm.notes}
-                  onChange={e => setMaintenanceForm(f => ({ ...f, notes: e.target.value }))}
-                />
-              </div>
-              {formError && <div className="text-red-600 text-sm">{formError}</div>}
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800"
-                  onClick={() => setShowMaintenanceModal(null)}
-                  disabled={loadingAction}
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white"
-                  disabled={loadingAction}
-                >
-                  {loadingAction ? 'Menyimpan...' : 'Jadwalkan'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <EquipmentMaintenanceModal
+        isOpen={!!showMaintenanceModal}
+        form={maintenanceForm}
+        onChange={setMaintenanceForm}
+        onClose={() => setShowMaintenanceModal(null)}
+        onSubmit={handleMaintenanceSubmit}
+        loading={loadingAction}
+        error={formError}
+      />
     </DashboardLayout>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import api from '../../api/axios';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import api from '../../../api/axios';
 
 const EquipmentDetail = () => {
   const { id } = useParams();

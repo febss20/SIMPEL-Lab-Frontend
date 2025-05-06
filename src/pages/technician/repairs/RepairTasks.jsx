@@ -1,51 +1,41 @@
-import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import { getAllEquipment, getAllLabs } from '../../api/admin';
-import { getAllRepairs, updateRepair, deleteRepair } from '../../api/repairs';
-import '../../utils/animations.css';
-import IconButton from '../../components/common/IconButton';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import '../../../utils/animations.css';
+import IconButton from '../../../components/common/IconButton';
 import { Link } from 'react-router-dom';
-import ConfirmModal from '../../components/common/ConfirmModal';
+import ConfirmModal from '../../../components/common/ConfirmModal';
+import RepairEditModal from '../../../components/technician/repairs/RepairEditModal';
+import useRepairTasks from '../../../hooks/technician/useRepairTasks';
 
 const RepairTasks = () => {
-  const [repairs, setRepairs] = useState([]);
-  const [equipment, setEquipment] = useState([]);
-  const [labs, setLabs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [labFilter, setLabFilter] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
-  const [loadingAction, setLoadingAction] = useState(false);
-  const [editRepair, setEditRepair] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editForm, setEditForm] = useState({ status: '', description: '', notes: '' });
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-
-  const fetchAll = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [repairsRes, eqRes, labsRes] = await Promise.all([
-        getAllRepairs(),
-        getAllEquipment(),
-        getAllLabs()
-      ]);
-      setRepairs(repairsRes);
-      setEquipment(eqRes);
-      setLabs(labsRes);
-    } catch (err) {
-      setError('Gagal memuat data repair');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAll();
-  }, []);
+  const {
+    repairs,
+    equipment,
+    labs,
+    loading,
+    error,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    labFilter,
+    setLabFilter,
+    successMsg,
+    loadingAction,
+    showEditModal,
+    setShowEditModal,
+    editForm,
+    handleEditChange,
+    handleEditSubmit,
+    handleEditClick,
+    handleUpdateStatus,
+    handleDelete,
+    confirmDelete,
+    confirmDeleteId,
+    setConfirmDeleteId,
+    deleteLoading,
+    filteredRepairs,
+    handleMarkUnrepairable,
+  } = useRepairTasks();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -98,99 +88,6 @@ const RepairTasks = () => {
         );
       default:
         return null;
-    }
-  };
-
-  const filteredRepairs = repairs.filter(repair => {
-    const eq = equipment.find(e => e.id === repair.equipmentId);
-    const matchesSearch = eq ? (eq.name.toLowerCase().includes(search.toLowerCase()) || (eq.type?.toLowerCase().includes(search.toLowerCase()))) : false;
-    const matchesStatus = statusFilter ? repair.status === statusFilter : true;
-    const matchesLab = labFilter ? (String(eq?.labId) === String(labFilter) || String(eq?.lab?.id) === String(labFilter)) : true;
-    return matchesSearch && matchesStatus && matchesLab;
-  });
-
-  const handleUpdateStatus = async (repair, newStatus) => {
-    setLoadingAction(true);
-    try {
-      const payload = { status: newStatus };
-      if (newStatus === 'COMPLETED') {
-        payload.completedAt = new Date().toISOString();
-      }
-      await updateRepair(repair.id, payload);
-      setSuccessMsg('Status berhasil diperbarui!');
-      fetchAll();
-      setTimeout(() => setSuccessMsg(''), 2000);
-    } catch (err) {
-      setError('Gagal memperbarui status: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
-    }
-  };
-
-  const handleEditClick = (repair) => {
-    setEditRepair(repair);
-    setEditForm({ status: repair.status, description: repair.description, notes: repair.notes || '' });
-    setShowEditModal(true);
-  };
-
-  const handleEditChange = (e) => {
-    setEditForm({ ...editForm, [e.target.name]: e.target.value });
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    setLoadingAction(true);
-    try {
-      const payload = { ...editForm };
-      if (payload.status === 'COMPLETED') {
-        payload.completedAt = new Date().toISOString();
-      }
-      await updateRepair(editRepair.id, payload);
-      setSuccessMsg('Repair berhasil diupdate!');
-      setShowEditModal(false);
-      fetchAll();
-      setTimeout(() => setSuccessMsg(''), 2000);
-    } catch (err) {
-      setError('Gagal update: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    setConfirmDeleteId(id);
-  };
-
-  const confirmDelete = async () => {
-    if (!confirmDeleteId) return;
-    setLoadingAction(true);
-    setDeleteLoading(true);
-    try {
-      await deleteRepair(confirmDeleteId);
-      setConfirmDeleteId(null);
-      setSuccessMsg('Repair berhasil dihapus!');
-      await fetchAll();
-      setTimeout(() => setSuccessMsg(''), 2000);
-    } catch (err) {
-      setError('Gagal menghapus: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
-      setDeleteLoading(false);
-    }
-  };
-
-  const handleMarkUnrepairable = async (repair) => {
-    if (!window.confirm('Yakin ingin menandai repair ini sebagai TIDAK BISA DIPERBAIKI? Setelah ini harus dikonfirmasi admin.')) return;
-    setLoadingAction(true);
-    try {
-      await updateRepair(repair.id, { status: 'UNREPAIRABLE' });
-      setSuccessMsg('Repair berhasil ditandai sebagai tidak bisa diperbaiki! Menunggu konfirmasi admin.');
-      fetchAll();
-      setTimeout(() => setSuccessMsg(''), 2000);
-    } catch (err) {
-      setError('Gagal menandai repair: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
     }
   };
 
@@ -479,94 +376,14 @@ const RepairTasks = () => {
             </div>
           </div>
         )}
-        {showEditModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadeIn">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md animate-scaleIn">
-              <div className="flex justify-between items-center mb-4 pb-2 border-b">
-                <h2 className="text-xl font-bold text-gray-800">Edit Repair Task</h2>
-                <button 
-                  onClick={() => setShowEditModal(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              
-              <form onSubmit={handleEditSubmit}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="status">Status</label>
-                  <select 
-                    id="status"
-                    name="status" 
-                    value={editForm.status} 
-                    onChange={handleEditChange} 
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  >
-                    <option value="PENDING">Pending</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="COMPLETED">Completed</option>
-                    <option value="CANCELLED">Cancelled</option>
-                    <option value="UNREPAIRABLE">Unrepairable</option>
-                  </select>
-                </div>
-                
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="description">Description</label>
-                  <input 
-                    id="description"
-                    type="text"
-                    name="description" 
-                    value={editForm.description} 
-                    onChange={handleEditChange} 
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  />
-                </div>
-                
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="notes">Notes</label>
-                  <textarea 
-                    id="notes"
-                    name="notes" 
-                    value={editForm.notes} 
-                    onChange={handleEditChange} 
-                    rows="3"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  ></textarea>
-                </div>
-                
-                <div className="flex justify-end gap-2 mt-6">
-                  <button 
-                    type="button" 
-                    onClick={() => setShowEditModal(false)} 
-                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
-                    disabled={loadingAction}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit" 
-                    className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors flex items-center"
-                    disabled={loadingAction}
-                  >
-                    {loadingAction ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Saving...
-                      </>
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        <RepairEditModal
+          isOpen={showEditModal}
+          form={editForm}
+          onChange={handleEditChange}
+          onClose={() => setShowEditModal(false)}
+          onSubmit={handleEditSubmit}
+          loading={loadingAction}
+        />
         <ConfirmModal
           isOpen={!!confirmDeleteId}
           title="Konfirmasi Hapus"
