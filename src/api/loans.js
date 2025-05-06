@@ -33,4 +33,9 @@ export const returnLoan = async (id, returnData) => {
 export const deleteLoan = async (id) => {
   const res = await api.delete(`/loans/${id}`);
   return res.data;
+};
+
+export const decideExtendLoan = async (id, decision) => {
+  const res = await api.put(`/loans/${id}/extend/decision`, { decision });
+  return res.data;
 }; 

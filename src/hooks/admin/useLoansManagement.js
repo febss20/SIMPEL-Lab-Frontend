@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllLoans, updateLoanStatus, deleteLoan } from '../../api/loans';
+import { getAllLoans, updateLoanStatus, deleteLoan, decideExtendLoan } from '../../api/loans';
 
 export default function useLoansManagement() {
   const [loans, setLoans] = useState([]);
@@ -58,6 +58,21 @@ export default function useLoansManagement() {
       fetchLoans();
     } catch (err) {
       setError('Gagal memperbarui status peminjaman: ' + (err?.response?.data?.message || err.message));
+    }
+  };
+
+  const handleDecideExtend = async (id, decision) => {
+    try {
+      await decideExtendLoan(id, decision);
+      setSuccessMsg(
+        decision === 'APPROVE'
+          ? 'Perpanjangan berhasil di-approve!'
+          : 'Perpanjangan berhasil di-reject!'
+      );
+      setTimeout(() => setSuccessMsg(''), 2000);
+      fetchLoans();
+    } catch (err) {
+      setError('Gagal memperbarui status perpanjangan: ' + (err?.response?.data?.message || err.message));
     }
   };
 
@@ -186,5 +201,6 @@ export default function useLoansManagement() {
     getStatusBadgeClass,
     exportToCSV,
     handleUpdateStatus,
+    handleDecideExtend,
   };
 } 

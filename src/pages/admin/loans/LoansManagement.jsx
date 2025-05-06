@@ -36,6 +36,7 @@ const LoansManagement = () => {
     getStatusBadgeClass,
     exportToCSV,
     handleUpdateStatus,
+    handleDecideExtend,
   } = useLoansManagement();
 
   const columns = [
@@ -49,6 +50,7 @@ const LoansManagement = () => {
     ) },
     { id: 'startDate', header: 'Tanggal Pinjam', sortable: true, render: row => row.startDate ? new Date(row.startDate).toLocaleDateString('id-ID') : '-' },
     { id: 'endDate', header: 'Tanggal Kembali', sortable: true, render: row => row.endDate ? new Date(row.endDate).toLocaleDateString('id-ID') : '-' },
+    { id: 'requestedEndDate', header: 'Req. Perpanjangan', sortable: false, render: row => row.requestedEndDate ? new Date(row.requestedEndDate).toLocaleDateString('id-ID') : '-' },
     {
       id: 'actions',
       header: 'Aksi',
@@ -67,22 +69,37 @@ const LoansManagement = () => {
               </svg>
             }
           />
-          {row.status === 'PENDING' && (
+          {row.status === 'PENDING' && row.requestedEndDate ? (
             <>
-              <IconButton 
-                type="approve" 
-                onClick={() => handleUpdateStatus(row.id, 'APPROVED')} 
+              <IconButton
+                type="approve"
+                onClick={() => handleDecideExtend(row.id, 'APPROVE')}
+                tooltip="Approve Perpanjangan"
+                size="sm"
+              />
+              <IconButton
+                type="reject"
+                onClick={() => handleDecideExtend(row.id, 'REJECT')}
+                tooltip="Reject Perpanjangan"
+                size="sm"
+              />
+            </>
+          ) : row.status === 'PENDING' && !row.requestedEndDate ? (
+            <>
+              <IconButton
+                type="approve"
+                onClick={() => handleUpdateStatus(row.id, 'APPROVED')}
                 tooltip="Approve"
                 size="sm"
               />
-              <IconButton 
-                type="reject" 
-                onClick={() => handleUpdateStatus(row.id, 'REJECTED')} 
+              <IconButton
+                type="reject"
+                onClick={() => handleUpdateStatus(row.id, 'REJECTED')}
                 tooltip="Reject"
                 size="sm"
               />
             </>
-          )}
+          ) : null}
           <IconButton 
             type="edit" 
             onClick={() => handleOpenStatusModal(row)} 

@@ -248,6 +248,16 @@ const LoanDetail = () => {
                   </div>
                 )}
                 
+                {loan.requestedEndDate && (
+                  <div className="mb-4 px-4 py-3 rounded-lg bg-yellow-100 text-yellow-800 border border-yellow-300 flex items-center animate-slideDown">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Permintaan perpanjangan: {new Date(loan.requestedEndDate).toLocaleDateString('id-ID')}<br />
+                    {loan.status === 'PENDING' && <span className="ml-2">(Menunggu persetujuan admin)</span>}
+                  </div>
+                )}
+                
                 <div className="border-t border-gray-100 pt-6">
                   <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -267,7 +277,7 @@ const LoanDetail = () => {
                         Perpanjang
                       </button>
                     )}
-                    {loan.status === 'ACTIVE' && (
+                    {loan.status === 'ACTIVE' && !loan.requestedEndDate && (
                       <button
                         className="px-4 py-2 rounded-lg flex items-center font-medium bg-gradient-to-r from-green-600 to-teal-500 text-white hover:from-green-700 hover:to-teal-600 transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
                         onClick={handleReturn}

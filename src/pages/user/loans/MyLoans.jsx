@@ -170,6 +170,12 @@ const MyLoans = () => {
                     <tr key={loan.id} className="hover:bg-gray-50 transition-colors" style={{animationDelay: `${index * 0.05}s`}}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium text-gray-900">{loan.equipment?.name || '-'}</div>
+                        {loan.requestedEndDate && (
+                          <div className="mt-1 text-xs text-yellow-600 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Permintaan perpanjangan: {new Date(loan.requestedEndDate).toLocaleDateString('id-ID')}
+                          </div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-gray-500">{loan.startDate ? new Date(loan.startDate).toLocaleDateString('id-ID') : '-'}</div>
@@ -179,6 +185,9 @@ const MyLoans = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(loan.status)}`}>{loan.status}</span>
+                        {loan.status === 'PENDING' && loan.requestedEndDate && (
+                          <div className="text-xs text-yellow-600 mt-1">Menunggu persetujuan admin</div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap flex gap-3">
                         <Link
@@ -187,7 +196,7 @@ const MyLoans = () => {
                         >
                           <IconButton type="view" tooltip="Lihat Detail" size="sm" />
                         </Link>
-                        {(loan.status === 'ACTIVE' || loan.status === 'APPROVED') && (
+                        {(loan.status === 'ACTIVE' || loan.status === 'APPROVED') && !loan.requestedEndDate && (
                           <button
                             className="inline-flex items-center text-purple-600 hover:text-purple-800 text-sm font-medium transition-colors"
                             onClick={() => handleOpenExtendModal(loan)}
@@ -198,7 +207,7 @@ const MyLoans = () => {
                             Perpanjang
                           </button>
                         )}
-                        {loan.status === 'ACTIVE' && (
+                        {loan.status === 'ACTIVE' && !loan.requestedEndDate && (
                           <button
                             className="inline-flex items-center text-green-600 hover:text-green-800 text-sm font-medium transition-colors"
                             onClick={() => handleReturn(loan.id)}
