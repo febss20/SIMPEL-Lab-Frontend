@@ -1,38 +1,35 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import api from '../../api/axios';
-import { createLoan } from '../../api/loans';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import EquipmentLoanModal from '../../../components/user/equipment/EquipmentLoanModal';
+import EquipmentRepairModal from '../../../components/user/equipment/EquipmentRepairModal';
+import useEquipmentBrowse from '../../../hooks/user/useEquipmentBrowse';
 
 const EquipmentBrowse = () => {
-  const [equipment, setEquipment] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [showLoanModal, setShowLoanModal] = useState(null);
-  const [showRepairModal, setShowRepairModal] = useState(null);
-  const [loanForm, setLoanForm] = useState({ startDate: '', endDate: '', notes: '' });
-  const [repairDesc, setRepairDesc] = useState('');
-  const [loadingAction, setLoadingAction] = useState(false);
-  const [formError, setFormError] = useState('');
-
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await api.get('/equipment');
-        setEquipment(res.data);
-      } catch (err) {
-        setError('Gagal memuat data peralatan');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchEquipment();
-  }, []);
+  const {
+    equipment,
+    loading,
+    error,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    showLoanModal,
+    setShowLoanModal,
+    showRepairModal,
+    setShowRepairModal,
+    loanForm,
+    repairDesc,
+    loadingAction,
+    formError,
+    filteredEquipment,
+    handleOpenLoanModal,
+    handleLoanFormChange,
+    handleLoanSubmit,
+    handleOpenRepairModal,
+    handleRepairDescChange,
+    handleRepairSubmit,
+  } = useEquipmentBrowse();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -46,88 +43,6 @@ const EquipmentBrowse = () => {
         return 'text-red-600 bg-red-100';
       default:
         return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const filteredEquipment = equipment.filter(eq => {
-    const matchesSearch = eq.name.toLowerCase().includes(search.toLowerCase()) || (eq.type?.toLowerCase().includes(search.toLowerCase()));
-    const matchesStatus = statusFilter ? eq.status === statusFilter : true;
-    return matchesSearch && matchesStatus;
-  });
-
-  const handleOpenLoanModal = (equipmentId) => {
-    setShowLoanModal(equipmentId);
-    setLoanForm({ startDate: '', endDate: '', notes: '' });
-    setFormError('');
-  };
-
-  const handleLoanSubmit = async (e) => {
-    e.preventDefault();
-    setFormError('');
-    const today = new Date();
-    const start = new Date(loanForm.startDate);
-    const end = new Date(loanForm.endDate);
-    today.setHours(0,0,0,0);
-    if (!loanForm.startDate || !loanForm.endDate) {
-      setFormError('Tanggal mulai dan selesai wajib diisi.');
-      return;
-    }
-    if (start < today) {
-      setFormError('Tanggal mulai tidak boleh sebelum hari ini.');
-      return;
-    }
-    if (end < start) {
-      setFormError('Tanggal selesai harus setelah tanggal mulai.');
-      return;
-    }
-    setLoadingAction(true);
-    try {
-      await createLoan({
-        equipmentId: showLoanModal,
-        startDate: loanForm.startDate,
-        endDate: loanForm.endDate,
-        notes: loanForm.notes
-      });
-      alert('Permintaan peminjaman berhasil diajukan!');
-      setShowLoanModal(null);
-      setLoanForm({ startDate: '', endDate: '', notes: '' });
-      const res = await api.get('/equipment');
-      setEquipment(res.data);
-    } catch (err) {
-      setFormError('Gagal mengajukan peminjaman: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
-    }
-  };
-
-  const handleOpenRepairModal = (equipmentId) => {
-    setShowRepairModal(equipmentId);
-    setRepairDesc('');
-    setFormError('');
-  };
-
-  const handleRepairSubmit = async (e) => {
-    e.preventDefault();
-    setFormError('');
-    if (!repairDesc.trim()) {
-      setFormError('Deskripsi kerusakan wajib diisi.');
-      return;
-    }
-    setLoadingAction(true);
-    try {
-      await api.post('/repairs', {
-        equipmentId: showRepairModal,
-        description: repairDesc
-      });
-      alert('Laporan kerusakan berhasil dikirim!');
-      setShowRepairModal(null);
-      setRepairDesc('');
-      const res = await api.get('/equipment');
-      setEquipment(res.data);
-    } catch (err) {
-      setFormError('Gagal melapor kerusakan: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoadingAction(false);
     }
   };
 
@@ -302,152 +217,24 @@ const EquipmentBrowse = () => {
           </div>
         )}
       </div>
-      {showLoanModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md transform transition-all ease-in-out duration-300 scale-100">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">Ajukan Peminjaman</h2>
-              <button onClick={() => { setShowLoanModal(null); setFormError(''); }} className="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleLoanSubmit} className="flex flex-col gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Laboratorium</label>
-                <input
-                  type="text"
-                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 bg-gray-100 text-gray-700"
-                  value={
-                    (equipment.find(eq => eq.id === showLoanModal)?.lab?.name) || '-'
-                  }
-                  disabled
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                <input
-                  type="date"
-                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  required
-                  value={loanForm.startDate}
-                  onChange={e => setLoanForm(f => ({ ...f, startDate: e.target.value }))}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                <input
-                  type="date"
-                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  required
-                  value={loanForm.endDate}
-                  onChange={e => setLoanForm(f => ({ ...f, endDate: e.target.value }))}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Catatan (opsional)</label>
-                <textarea
-                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  rows="3"
-                  value={loanForm.notes}
-                  onChange={e => setLoanForm(f => ({ ...f, notes: e.target.value }))}
-                  placeholder="Catatan untuk peminjaman atau persyaratan khusus..."
-                ></textarea>
-              </div>
-              {formError && (
-                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded">
-                  <p className="text-sm">{formError}</p>
-                </div>
-              )}
-              <div className="flex justify-end gap-2 mt-2">
-                <button
-                  type="button"
-                  className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium"
-                  onClick={() => { setShowLoanModal(null); setFormError(''); }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-500 text-white hover:from-indigo-700 hover:to-blue-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  disabled={loadingAction}
-                >
-                  {loadingAction ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Memproses...
-                    </span>
-                  ) : (
-                    'Ajukan Permintaan'
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      {showRepairModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md transform transition-all ease-in-out duration-300 scale-100">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">Lapor Kerusakan Peralatan</h2>
-              <button onClick={() => { setShowRepairModal(null); setFormError(''); }} className="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleRepairSubmit} className="flex flex-col gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi Kerusakan</label>
-                <textarea
-                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  rows="5"
-                  required
-                  value={repairDesc}
-                  onChange={e => setRepairDesc(e.target.value)}
-                  placeholder="Deskripsi kerusakan secara detail..."
-                ></textarea>
-              </div>
-              {formError && (
-                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded">
-                  <p className="text-sm">{formError}</p>
-                </div>
-              )}
-              <div className="flex justify-end gap-2 mt-2">
-                <button
-                  type="button"
-                  className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium"
-                  onClick={() => { setShowRepairModal(null); setFormError(''); }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-pink-500 text-white hover:from-red-700 hover:to-pink-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  disabled={loadingAction}
-                >
-                  {loadingAction ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Memproses...
-                    </span>
-                  ) : (
-                    'Kirim Laporan'
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <EquipmentLoanModal
+        isOpen={!!showLoanModal}
+        form={loanForm}
+        onChange={handleLoanFormChange}
+        onClose={() => setShowLoanModal(null)}
+        onSubmit={handleLoanSubmit}
+        loading={loadingAction}
+        error={formError}
+      />
+      <EquipmentRepairModal
+        isOpen={!!showRepairModal}
+        value={repairDesc}
+        onChange={handleRepairDescChange}
+        onClose={() => setShowRepairModal(null)}
+        onSubmit={handleRepairSubmit}
+        loading={loadingAction}
+        error={formError}
+      />
     </DashboardLayout>
   );
 };

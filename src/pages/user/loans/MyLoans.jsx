@@ -1,41 +1,29 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import api from '../../api/axios';
-import { extendLoan } from '../../api/loans';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import LoanExtendModal from '../../../components/user/loans/LoanExtendModal';
+import useMyLoans from '../../../hooks/user/useMyLoans';
 
 const MyLoans = () => {
-  const { user } = useSelector((state) => state.auth);
-  const [loans, setLoans] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [returnLoading, setReturnLoading] = useState(null);
-  const [showExtendModal, setShowExtendModal] = useState(null);
-  const [extendForm, setExtendForm] = useState({ newEndDate: '', notes: '' });
-  const [extendLoading, setExtendLoading] = useState(false);
-  const [formError, setFormError] = useState('');
-
-  useEffect(() => {
-    const fetchLoans = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const token = localStorage.getItem('token');
-        const res = await api.get(`/loans/user/${user.id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setLoans(res.data);
-      } catch (err) {
-        setError('Gagal memuat data peminjaman');
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (user?.id) fetchLoans();
-  }, [user?.id]);
+  const {
+    loans,
+    loading,
+    error,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    returnLoading,
+    showExtendModal,
+    setShowExtendModal,
+    extendForm,
+    extendLoading,
+    formError,
+    filteredLoans,
+    handleReturn,
+    handleOpenExtendModal,
+    handleExtendFormChange,
+    handleExtendSubmit,
+  } = useMyLoans();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -53,66 +41,6 @@ const MyLoans = () => {
         return 'text-gray-600 bg-gray-200';
       default:
         return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const filteredLoans = loans.filter(loan => {
-    const matchesSearch = loan.equipment?.name?.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter ? loan.status === statusFilter : true;
-    return matchesSearch && matchesStatus;
-  });
-
-  const handleReturn = async (loanId) => {
-    setReturnLoading(loanId);
-    try {
-      const token = localStorage.getItem('token');
-      await api.put(`/loans/${loanId}/return`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const res = await api.get(`/loans/user/${user.id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setLoans(res.data);
-    } catch (err) {
-      alert('Gagal melakukan pengembalian');
-    } finally {
-      setReturnLoading(null);
-    }
-  };
-
-  const handleOpenExtendModal = (loan) => {
-    setShowExtendModal(loan.id);
-    setExtendForm({ newEndDate: '', notes: '' });
-    setFormError('');
-  };
-
-  const handleExtendSubmit = async (e) => {
-    e.preventDefault();
-    setFormError('');
-    const loan = loans.find(l => l.id === showExtendModal);
-    if (!extendForm.newEndDate) {
-      setFormError('Tanggal baru wajib diisi.');
-      return;
-    }
-    const oldEnd = new Date(loan.endDate);
-    const newEnd = new Date(extendForm.newEndDate);
-    if (newEnd <= oldEnd) {
-      setFormError('Tanggal baru harus setelah tanggal kembali lama.');
-      return;
-    }
-    setExtendLoading(true);
-    try {
-      await extendLoan(showExtendModal, { newEndDate: extendForm.newEndDate, notes: extendForm.notes });
-      alert('Permintaan perpanjangan berhasil diajukan!');
-      setShowExtendModal(null);
-      setExtendForm({ newEndDate: '', notes: '' });
-      const token = localStorage.getItem('token');
-      const res = await api.get(`/loans/user/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
-      setLoans(res.data);
-    } catch (err) {
-      setFormError('Gagal memperpanjang: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setExtendLoading(false);
     }
   };
 
@@ -285,73 +213,19 @@ const MyLoans = () => {
           </div>
         )}
         
-        {showExtendModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
-            <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md transform transition-all ease-in-out duration-300 scale-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-800">Perpanjangan Peminjaman</h2>
-                <button onClick={() => { setShowExtendModal(null); setFormError(''); }} className="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <form onSubmit={handleExtendSubmit} className="flex flex-col gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Tanggal Baru (setelah jatuh tempo lama)</label>
-                  <input
-                    type="date"
-                    className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                    required
-                    value={extendForm.newEndDate}
-                    onChange={e => setExtendForm(f => ({ ...f, newEndDate: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Alasan Perpanjangan (opsional)</label>
-                  <textarea
-                    className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                    rows="3"
-                    value={extendForm.notes}
-                    onChange={e => setExtendForm(f => ({ ...f, notes: e.target.value }))}
-                    placeholder="Masukkan alasan untuk meminta perpanjangan..."
-                  ></textarea>
-                </div>
-                {formError && (
-                  <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded">
-                    <p className="text-sm">{formError}</p>
-                  </div>
-                )}
-                <div className="flex justify-end gap-2 mt-2">
-                  <button
-                    type="button"
-                    className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium"
-                    onClick={() => { setShowExtendModal(null); setFormError(''); }}
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-500 text-white hover:from-purple-700 hover:to-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    disabled={extendLoading}
-                  >
-                    {extendLoading ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Memproses...
-                      </span>
-                    ) : (
-                      'Perpanjang'
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        <LoanExtendModal
+          isOpen={!!showExtendModal}
+          form={extendForm}
+          onChange={handleExtendFormChange}
+          onClose={() => setShowExtendModal(null)}
+          onSubmit={handleExtendSubmit}
+          loading={extendLoading}
+          error={formError}
+          oldEndDate={(() => {
+            const loan = loans.find(l => l.id === showExtendModal);
+            return loan ? new Date(loan.endDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+          })()}
+        />
       </div>
     </DashboardLayout>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import api from '../../api/axios';
-import { createLoan } from '../../api/loans';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import api from '../../../api/axios';
+import { createLoan } from '../../../api/loans';
 
 const RequestEquipment = () => {
   const [equipmentList, setEquipmentList] = useState([]);

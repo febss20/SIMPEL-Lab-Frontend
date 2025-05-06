@@ -1,39 +1,25 @@
-import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-import api from '../../api/axios';
-import Modal from '../../components/common/Modal';
+import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import useLoanDetail from '../../../hooks/user/useLoanDetail';
+import LoanExtendModal from '../../../components/user/loans/LoanExtendModal';
 
 const LoanDetail = () => {
   const { id } = useParams();
-  const [loan, setLoan] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [returnLoading, setReturnLoading] = useState(false);
-  const [showExtendModal, setShowExtendModal] = useState(false);
-  const [extendDate, setExtendDate] = useState('');
-  const [extendLoading, setExtendLoading] = useState(false);
-  const [extendError, setExtendError] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchDetail = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const token = localStorage.getItem('token');
-        const res = await api.get(`/loans/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setLoan(res.data);
-      } catch (err) {
-        setError('Gagal memuat detail pinjaman');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDetail();
-  }, [id]);
+  const {
+    loan,
+    loading,
+    error,
+    returnLoading,
+    showExtendModal,
+    setShowExtendModal,
+    extendDate,
+    extendLoading,
+    extendError,
+    handleReturn,
+    handleExtendDateChange,
+    handleExtend,
+  } = useLoanDetail(id, navigate);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -70,45 +56,6 @@ const LoanDetail = () => {
         return 'Rejected';
       default:
         return status;
-    }
-  };
-
-  const handleReturn = async () => {
-    setReturnLoading(true);
-    try {
-      const token = localStorage.getItem('token');
-      await api.put(`/loans/${id}/return`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      navigate('/user/loans');
-    } catch (err) {
-      alert('Gagal melakukan pengembalian');
-    } finally {
-      setReturnLoading(false);
-    }
-  };
-
-  const handleExtend = async (e) => {
-    e.preventDefault();
-    setExtendLoading(true);
-    setExtendError(null);
-    try {
-      const token = localStorage.getItem('token');
-      await api.put(`/loans/${id}/extend`, {
-        newEndDate: extendDate,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setShowExtendModal(false);
-      setExtendDate('');
-      const res = await api.get(`/loans/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setLoan(res.data);
-    } catch (err) {
-      setExtendError('Gagal memperpanjang pinjaman');
-    } finally {
-      setExtendLoading(false);
     }
   };
 
@@ -331,52 +278,16 @@ const LoanDetail = () => {
           </div>
         ) : null}
         
-        <Modal isOpen={showExtendModal} onClose={() => setShowExtendModal(false)} title="Perpanjang Pinjaman">
-          <form onSubmit={handleExtend} className="flex flex-col gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Tanggal Baru (setelah jatuh tempo lama)</label>
-              <input
-                type="date"
-                className="mt-1 w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                value={extendDate}
-                min={loan?.endDate ? new Date(new Date(loan.endDate).getTime() + 86400000).toISOString().split('T')[0] : ''}
-                onChange={e => setExtendDate(e.target.value)}
-                required
-              />
-            </div>
-            {extendError && (
-              <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded">
-                <p className="text-sm">{extendError}</p>
-              </div>
-            )}
-            <div className="flex justify-end gap-2 mt-2">
-              <button 
-                type="button" 
-                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                onClick={() => setShowExtendModal(false)}
-              >
-                Batal
-              </button>
-              <button 
-                type="submit" 
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-500 text-white hover:from-purple-700 hover:to-indigo-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5" 
-                disabled={extendLoading}
-              >
-                {extendLoading ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Memproses...
-                  </span>
-                ) : (
-                  'Perpanjang'
-                )}
-              </button>
-            </div>
-          </form>
-        </Modal>
+        <LoanExtendModal
+          isOpen={showExtendModal}
+          form={{ newEndDate: extendDate, notes: '' }}
+          onChange={handleExtendDateChange}
+          onClose={() => setShowExtendModal(false)}
+          onSubmit={handleExtend}
+          loading={extendLoading}
+          error={extendError}
+          oldEndDate={loan ? new Date(loan.endDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+        />
       </div>
     </DashboardLayout>
   );
