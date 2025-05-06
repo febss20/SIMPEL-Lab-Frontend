@@ -126,28 +126,6 @@ const MaintenanceTaskDetail = () => {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto px-4 py-8 animate-fadeIn">
-        <nav className="mb-6 text-sm font-medium">
-          <ol className="list-none p-0 inline-flex">
-            <li className="flex items-center">
-              <Link to="/technician" className="text-gray-500 hover:text-indigo-600 transition-colors">
-                Dashboard
-              </Link>
-              <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-              </svg>
-            </li>
-            <li className="flex items-center">
-              <Link to="/technician/maintenance" className="text-gray-500 hover:text-indigo-600 transition-colors">
-                Maintenance Tasks
-              </Link>
-              <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-              </svg>
-            </li>
-            <li className="text-indigo-600">Detail Task #{task.id}</li>
-          </ol>
-        </nav>
-
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all hover:shadow-lg border border-gray-100">
           <div className="bg-gradient-to-r from-indigo-500 to-purple-600 py-6 px-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -156,7 +134,7 @@ const MaintenanceTaskDetail = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Maintenance Task Detail
+                Detail Perawatan #{task.id}
               </h1>
               <div 
                 className={`px-4 py-2 rounded-lg flex items-center ${getStatusColor(task.status)} border shadow-sm animate-fadeIn`}
@@ -181,7 +159,7 @@ const MaintenanceTaskDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Equipment</p>
+                        <p className="text-sm text-gray-500">Peralatan</p>
                         <p className="font-medium text-gray-900">{task.equipment ? task.equipment.name : `ID: ${task.equipmentId}`}</p>
                         {equipment && equipment.type && (
                           <span className="text-sm text-gray-500">{equipment.type}</span>
@@ -208,7 +186,7 @@ const MaintenanceTaskDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Description</p>
+                        <p className="text-sm text-gray-500">Deskripsi</p>
                         <p className="font-medium text-gray-900">{task.description}</p>
                       </div>
                     </div>
@@ -216,14 +194,14 @@ const MaintenanceTaskDetail = () => {
                 </div>
                 
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 shadow-sm hover:shadow transition-all card-hover slide-in-right">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Settings</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Pengaturan</h3>
                   
                   <div className="flex items-center justify-between py-3">
                     <div className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
-                      <span className="text-gray-700">Periodic Maintenance</span>
+                      <span className="text-gray-700">Perawatan Berkala</span>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${task.isPeriodic ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                       {task.isPeriodic ? 'Ya' : 'Tidak'}
@@ -244,7 +222,7 @@ const MaintenanceTaskDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Scheduled Date</p>
+                        <p className="text-sm text-gray-500">Tanggal Perawatan</p>
                         <p className="font-medium text-gray-900">{formatDate(task.scheduledDate)}</p>
                       </div>
                     </div>
@@ -256,7 +234,7 @@ const MaintenanceTaskDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Completion Date</p>
+                        <p className="text-sm text-gray-500">Tanggal Selesai</p>
                         <p className="font-medium text-gray-900">{formatDate(task.completionDate)}</p>
                       </div>
                     </div>
@@ -268,7 +246,7 @@ const MaintenanceTaskDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Created At</p>
+                        <p className="text-sm text-gray-500">Dibuat</p>
                         <p className="font-medium text-gray-900">{formatDate(task.createdAt)}</p>
                       </div>
                     </div>
@@ -280,7 +258,7 @@ const MaintenanceTaskDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Updated At</p>
+                        <p className="text-sm text-gray-500">Diperbarui</p>
                         <p className="font-medium text-gray-900">{formatDate(task.updatedAt)}</p>
                       </div>
                     </div>
@@ -288,7 +266,7 @@ const MaintenanceTaskDetail = () => {
                 </div>
                 
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 shadow-sm hover:shadow transition-all card-hover slide-in-right">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Notes</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Catatan</h3>
                   
                   <div className="bg-white rounded-md p-4 border border-gray-200">
                     <p className="text-gray-700 whitespace-pre-line">{task.notes || 'Tidak ada catatan.'}</p>
@@ -317,7 +295,7 @@ const MaintenanceTaskDetail = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            Lihat Semua Task
+            Lihat Semua Perawatan
           </Link>
         </div>
       </div>

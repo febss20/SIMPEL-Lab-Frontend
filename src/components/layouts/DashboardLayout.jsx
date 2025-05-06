@@ -105,25 +105,25 @@ const DashboardLayout = ({ children }) => {
         return [
           ...baseLinks,
           { name: 'Lab', path: '/admin/lab', icon: <LabIcon /> },
-          { name: 'Users', path: '/admin/users', icon: <UsersIcon /> },
-          { name: 'Equipment', path: '/admin/equipment', icon: <EquipmentIcon /> },
-          { name: 'Loans', path: '/admin/loans', icon: <LoansIcon /> },
-          { name: 'Reports', path: '/admin/reports', icon: <ReportsIcon /> },
+          { name: 'Pengguna ', path: '/admin/users', icon: <UsersIcon /> },
+          { name: 'Peralatan', path: '/admin/equipment', icon: <EquipmentIcon /> },
+          { name: 'Peminjaman', path: '/admin/loans', icon: <LoansIcon /> },
+          { name: 'Laporan', path: '/admin/reports', icon: <ReportsIcon /> },
         ];
       case 'TECHNICIAN':
         return [
           ...baseLinks,
-          { name: 'Equipment', path: '/technician/equipment', icon: <EquipmentIcon /> },
-          { name: 'Maintenance', path: '/technician/maintenance', icon: <MaintenanceIcon /> },
-          { name: 'Repairs', path: '/technician/repairs', icon: <RepairsIcon /> },
-          { name: 'Spare Parts', path: '/technician/spare-parts', icon: <SparePartsIcon /> },
+          { name: 'Peralatan', path: '/technician/equipment', icon: <EquipmentIcon /> },
+          { name: 'Perawatan', path: '/technician/maintenance', icon: <MaintenanceIcon /> },
+          { name: 'Perbaikan', path: '/technician/repairs', icon: <RepairsIcon /> },
+          { name: 'Spare Part', path: '/technician/spare-parts', icon: <SparePartsIcon /> },
         ];
       default:
         return [
           ...baseLinks,
-          { name: 'Equipment', path: '/user/equipment', icon: <EquipmentIcon /> },
-          { name: 'My Loans', path: '/user/loans', icon: <LoansIcon /> },
-          { name: 'Request Equipment', path: '/user/request', icon: <RequestIcon /> },
+          { name: 'Peralatan', path: '/user/equipment', icon: <EquipmentIcon /> },
+          { name: 'Peminjaman', path: '/user/loans', icon: <LoansIcon /> },
+          { name: 'Permintaan Peminjaman', path: '/user/request', icon: <RequestIcon /> },
         ];
     }
   };

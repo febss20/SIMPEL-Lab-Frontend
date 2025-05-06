@@ -54,7 +54,7 @@ const SparePartsInventory = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Inventory Spare Part</h1>
+              <h1 className="text-3xl font-bold">Inventaris Spare Part</h1>
               <p className="opacity-80">Mengelola dan memantau semua bagian pengganti peralatan</p>
             </div>
           </div>
@@ -164,7 +164,7 @@ const SparePartsInventory = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Maintenance Task</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perawatan</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Spare part</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor Spare part</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>

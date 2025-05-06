@@ -102,7 +102,7 @@ const RepairTasks = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Repair Tasks</h1>
+              <h1 className="text-3xl font-bold">Perbaikan</h1>
               <p className="opacity-80">Mengelola dan memantau semua perbaikan peralatan</p>
             </div>
           </div>

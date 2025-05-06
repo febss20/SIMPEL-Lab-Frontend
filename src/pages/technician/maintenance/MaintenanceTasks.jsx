@@ -99,7 +99,7 @@ const MaintenanceTasks = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Maintenance Tasks</h1>
+              <h1 className="text-3xl font-bold">Perawatan</h1>
               <p className="opacity-80">Mengelola semua jadwal dan aktivitas pemeliharaan peralatan</p>
             </div>
             <div className="ml-auto flex gap-2 items-center">

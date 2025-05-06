@@ -93,7 +93,7 @@ const EquipmentOverview = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Overview Peralatan</h1>
+              <h1 className="text-3xl font-bold">Jelajahi Peralatan</h1>
               <p className="opacity-80">Mengelola dan memantau semua peralatan laboratorium</p>
             </div>
             <div className="ml-auto flex gap-2 items-center">

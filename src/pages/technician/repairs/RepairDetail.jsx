@@ -184,28 +184,6 @@ const RepairDetail = () => {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto px-4 py-8 animate-fadeIn">
-        <nav className="mb-6 text-sm font-medium">
-          <ol className="list-none p-0 inline-flex">
-            <li className="flex items-center">
-              <Link to="/technician" className="text-gray-500 hover:text-indigo-600 transition-colors">
-                Dashboard
-              </Link>
-              <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-              </svg>
-            </li>
-            <li className="flex items-center">
-              <Link to="/technician/repairs" className="text-gray-500 hover:text-indigo-600 transition-colors">
-                Repair Tasks
-              </Link>
-              <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-              </svg>
-            </li>
-            <li className="text-indigo-600">Detail Repair #{repair.id}</li>
-          </ol>
-        </nav>
-    
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all hover:shadow-lg border border-gray-100">
           <div className="bg-gradient-to-r from-orange-500 to-amber-600 py-6 px-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -213,7 +191,7 @@ const RepairDetail = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Repair Detail
+                Detail Perbaikan #{repair.id}
               </h1>
               <div 
                 className={`px-4 py-2 rounded-lg flex items-center ${getStatusColor(repair.status)} border shadow-sm animate-fadeIn status-badge`}
@@ -238,7 +216,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Equipment</p>
+                        <p className="text-sm text-gray-500">Peralatan</p>
                         <p className="font-medium text-gray-900">{repair.equipment ? repair.equipment.name : `ID: ${repair.equipmentId}`}</p>
                         {equipment && equipment.type && (
                           <span className="text-xs text-gray-500">{equipment.type}</span>
@@ -253,7 +231,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Reported By</p>
+                        <p className="text-sm text-gray-500">Dilaporkan Oleh</p>
                         <p className="font-medium text-gray-900">
                           {repair.user ? (repair.user.fullName || repair.user.username) : `User ID: ${repair.userId}`}
                         </p>
@@ -270,7 +248,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Description</p>
+                        <p className="text-sm text-gray-500">Deskripsi</p>
                         <p className="font-medium text-gray-900">{repair.description}</p>
                       </div>
                     </div>
@@ -278,7 +256,7 @@ const RepairDetail = () => {
                 </div>
                 
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 shadow-sm hover:shadow transition-all card-hover slide-in-right">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Admin Confirmation</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Konfirmasi Admin</h3>
                   
                   <div className="flex items-center py-3">
                     <div className="flex-shrink-0 h-8 w-8 rounded-md bg-orange-100 flex items-center justify-center mr-3">
@@ -287,7 +265,7 @@ const RepairDetail = () => {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Admin Confirmation Status</p>
+                      <p className="text-sm text-gray-500">Status Konfirmasi Admin</p>
                       {getAdminConfirmationStatus()}
                     </div>
                   </div>
@@ -306,7 +284,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Reported Date</p>
+                        <p className="text-sm text-gray-500">Tanggal Dilaporkan</p>
                         <p className="font-medium text-gray-900">{formatDate(repair.reportedDate)}</p>
                       </div>
                     </div>
@@ -318,7 +296,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Completion Date</p>
+                        <p className="text-sm text-gray-500">Tanggal Selesai</p>
                         <p className="font-medium text-gray-900">{formatDate(repair.completionDate)}</p>
                       </div>
                     </div>
@@ -330,7 +308,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Created At</p>
+                        <p className="text-sm text-gray-500">Dibuat</p>
                         <p className="font-medium text-gray-900">{formatDate(repair.createdAt)}</p>
                       </div>
                     </div>
@@ -342,7 +320,7 @@ const RepairDetail = () => {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Updated At</p>
+                        <p className="text-sm text-gray-500">Diperbarui</p>
                         <p className="font-medium text-gray-900">{formatDate(repair.updatedAt)}</p>
                       </div>
                     </div>
@@ -350,7 +328,7 @@ const RepairDetail = () => {
                 </div>
                 
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 shadow-sm hover:shadow transition-all card-hover slide-in-right">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Notes</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Catatan</h3>
                   
                   <div className="bg-white rounded-md p-4 border border-gray-200">
                     <p className="text-gray-700 whitespace-pre-line">{repair.notes || 'Tidak ada catatan.'}</p>
@@ -380,7 +358,7 @@ const RepairDetail = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            Lihat Semua Repair
+            Lihat Semua Perbaikan
           </Link>
         </div>
       </div>

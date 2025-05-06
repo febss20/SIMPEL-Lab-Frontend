@@ -42,7 +42,7 @@ const EquipmentMaintenanceModal = ({
                 checked={form.isPeriodic}
                 onChange={e => onChange({ ...form, isPeriodic: e.target.checked })}
               />
-              <span className="ml-2">Maintenance Berkala</span>
+              <span className="ml-2">Perawatan Berkala</span>
             </label>
           </div>
           <div>
