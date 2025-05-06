@@ -17,13 +17,10 @@ const UserDashboard = () => {
         setIsLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
-        // Fetch loans for this user
         const loansRes = await api.get(`/loans/user/${user.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        // Fetch all equipment
         const equipmentRes = await api.get('/equipment');
-        // Map loans to match UI structure
         const loansData = loansRes.data.map(l => ({
           id: l.id,
           equipment: l.equipment?.name || '-',
@@ -32,7 +29,6 @@ const UserDashboard = () => {
           status: l.status ? l.status.toLowerCase() : '-',
         }));
         setLoans(loansData);
-        // Ambil 4 equipment dengan availability terbanyak
         const eqList = equipmentRes.data
           .map(eq => ({
             id: eq.id,
@@ -78,7 +74,6 @@ const UserDashboard = () => {
     );
   }
 
-  // Helper function to get appropriate color for loan status
   const getStatusColor = (status) => {
     switch (status) {
       case 'active':
@@ -98,7 +93,6 @@ const UserDashboard = () => {
     }
   };
 
-  // Sort loans by startDate descending (terbaru dulu)
   const sortedLoans = [...loans].sort((a, b) => {
     const dateA = a.loanDate === '-' ? 0 : new Date(a.loanDate).getTime();
     const dateB = b.loanDate === '-' ? 0 : new Date(b.loanDate).getTime();

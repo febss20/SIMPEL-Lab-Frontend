@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../../utils/animations.css';
 import EquipmentMaintenanceModal from '../../../components/technician/equipment/EquipmentMaintenanceModal';
 import useEquipmentOverview from '../../../hooks/technician/useEquipmentOverview';
+import IconButton from '../../../components/common/IconButton';
 
 const EquipmentOverview = () => {
   const {
@@ -301,11 +302,8 @@ const EquipmentOverview = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
-                            <Link to={`/technician/equipment/${eq.id}`} className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded transition-colors" title="Lihat Detail">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                                <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                              </svg>
+                            <Link to={`/technician/equipment/${eq.id}`} title="Lihat Detail">
+                              <IconButton type="view" tooltip="Lihat Detail" size="sm" />
                             </Link>
                             <button
                               className={`text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 rounded-md p-1.5 transition-colors ${eq.status === 'IN_USE' ? 'opacity-50 cursor-not-allowed' : ''}`}

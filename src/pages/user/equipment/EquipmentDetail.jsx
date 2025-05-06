@@ -3,6 +3,7 @@ import DashboardLayout from '../../../components/layouts/DashboardLayout';
 import EquipmentLoanModal from '../../../components/user/equipment/EquipmentLoanModal';
 import EquipmentRepairModal from '../../../components/user/equipment/EquipmentRepairModal';
 import useEquipmentDetail from '../../../hooks/user/useEquipmentDetail';
+import Modal from '../../../components/common/Modal';
 
 const EquipmentDetail = () => {
   const { id } = useParams();
@@ -24,6 +25,10 @@ const EquipmentDetail = () => {
     handleOpenRepairModal,
     handleRepairDescChange,
     handleRepairSubmit,
+    showRepairSuccess,
+    setShowRepairSuccess,
+    showLoanSuccess,
+    setShowLoanSuccess,
   } = useEquipmentDetail(id);
 
   const getStatusColor = (status) => {
@@ -211,6 +216,44 @@ const EquipmentDetail = () => {
         loading={loadingAction}
         error={formError}
       />
+      <Modal
+        isOpen={showRepairSuccess}
+        onClose={() => setShowRepairSuccess(false)}
+        title="Berhasil!"
+      >
+        <div className="flex flex-col items-center text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h4 className="text-lg font-semibold mb-2">Laporan kerusakan berhasil dikirim!</h4>
+          <p className="text-gray-600 mb-4">Terima kasih telah melaporkan kerusakan. Tim kami akan segera menindaklanjuti laporan Anda.</p>
+          <button
+            className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+            onClick={() => setShowRepairSuccess(false)}
+          >
+            Tutup
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={showLoanSuccess}
+        onClose={() => setShowLoanSuccess(false)}
+        title="Berhasil!"
+      >
+        <div className="flex flex-col items-center text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h4 className="text-lg font-semibold mb-2">Permintaan peminjaman berhasil diajukan!</h4>
+          <p className="text-gray-600 mb-4">Permintaan Anda telah dikirim. Silakan menunggu konfirmasi dari admin atau petugas lab.</p>
+          <button
+            className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+            onClick={() => setShowLoanSuccess(false)}
+          >
+            Tutup
+          </button>
+        </div>
+      </Modal>
     </DashboardLayout>
   );
 };

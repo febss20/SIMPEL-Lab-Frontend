@@ -5,6 +5,7 @@ import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { getAllMaintenance } from '../../api/maintenance';
 import api from '../../api/axios';
 import '../../utils/animations.css';
+import IconButton from '../../components/common/IconButton';
 
 const TechnicianDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -337,18 +338,14 @@ const TechnicianDashboard = () => {
                                     ? `/technician/maintenance/${task.id.replace('maintenance-', '')}`
                                     : `/technician/repairs/${task.id.replace('repair-', '')}`
                                 }
-                                className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded transition-colors"
-                                title="View Details"
+                                title="Lihat Detail"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                  <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                                  <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                                </svg>
+                                <IconButton type="view" tooltip="Lihat Detail" size="sm" />
                               </Link>
                               {task.status === 'pending' && (
                                 <button 
                                   className="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1 rounded transition-colors"
-                                  title="Start Task"
+                                  title="Mulai Tugas"
                                 >
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -359,7 +356,7 @@ const TechnicianDashboard = () => {
                               {task.status === 'in-progress' && (
                                 <button 
                                   className="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-2 py-1 rounded transition-colors"
-                                  title="Complete Task"
+                                  title="Selesaikan Tugas"
                                 >
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

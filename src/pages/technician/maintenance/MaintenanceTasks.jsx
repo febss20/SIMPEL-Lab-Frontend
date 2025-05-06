@@ -320,11 +320,12 @@ const MaintenanceTasks = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex gap-2">
                             {task.status === 'SCHEDULED' && (
                               <button
-                                className="flex items-center px-3 py-1 rounded bg-blue-500 hover:bg-blue-600 text-white text-xs shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5"
+                                className="flex items-center text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors"
                                 onClick={() => handleUpdateStatus(task, 'IN_PROGRESS')}
                                 disabled={loadingAction}
+                                title="Mulai Perawatan"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -333,23 +334,25 @@ const MaintenanceTasks = () => {
                             )}
                             {task.status === 'IN_PROGRESS' && (
                               <button
-                                className="flex items-center px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-xs shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5"
+                                className="flex items-center text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1 rounded transition-colors"
                                 onClick={() => handleUpdateStatus(task, 'COMPLETED')}
                                 disabled={loadingAction}
+                                title="Selesaikan Perawatan"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4.4L19 7" />
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                Selesai
+                                Selesaikan
                               </button>
                             )}
                             {['SCHEDULED', 'IN_PROGRESS'].includes(task.status) && (
                               <button
-                                className="flex items-center px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-xs shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5"
+                                className="flex items-center text-red-500 hover:text-white bg-red-100 hover:bg-red-600 px-2 py-1 rounded transition-colors ml-2"
                                 onClick={() => handleUpdateStatus(task, 'CANCELLED')}
                                 disabled={loadingAction}
+                                title="Batalkan Perawatan"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                                 Batalkan

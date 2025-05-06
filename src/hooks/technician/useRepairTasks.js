@@ -121,7 +121,6 @@ export default function useRepairTasks() {
   };
 
   const handleMarkUnrepairable = async (repair) => {
-    // This should be handled by a confirmation modal in the page, not here
     setLoadingAction(true);
     try {
       await updateRepair(repair.id, { status: 'UNREPAIRABLE' });

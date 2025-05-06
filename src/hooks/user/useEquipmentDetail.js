@@ -12,6 +12,8 @@ export default function useEquipmentDetail(id) {
   const [repairDesc, setRepairDesc] = useState('');
   const [loadingAction, setLoadingAction] = useState(false);
   const [formError, setFormError] = useState('');
+  const [showRepairSuccess, setShowRepairSuccess] = useState(false);
+  const [showLoanSuccess, setShowLoanSuccess] = useState(false);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -66,9 +68,9 @@ export default function useEquipmentDetail(id) {
         endDate: loanForm.endDate,
         notes: loanForm.notes
       });
-      alert('Permintaan peminjaman berhasil diajukan!');
       setShowLoanModal(false);
       setLoanForm({ startDate: '', endDate: '', notes: '' });
+      setShowLoanSuccess(true);
       const res = await api.get(`/equipment/${id}`);
       setEquipment(res.data);
     } catch (err) {
@@ -101,9 +103,9 @@ export default function useEquipmentDetail(id) {
         equipmentId: equipment.id,
         description: repairDesc
       });
-      alert('Laporan kerusakan berhasil dikirim!');
       setShowRepairModal(false);
       setRepairDesc('');
+      setShowRepairSuccess(true);
       const res = await api.get(`/equipment/${id}`);
       setEquipment(res.data);
     } catch (err) {
@@ -134,5 +136,9 @@ export default function useEquipmentDetail(id) {
     handleOpenRepairModal,
     handleRepairDescChange,
     handleRepairSubmit,
+    showRepairSuccess,
+    setShowRepairSuccess,
+    showLoanSuccess,
+    setShowLoanSuccess,
   };
 } 
