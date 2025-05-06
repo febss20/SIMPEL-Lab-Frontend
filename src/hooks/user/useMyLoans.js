@@ -15,6 +15,8 @@ export default function useMyLoans() {
   const [extendForm, setExtendForm] = useState({ newEndDate: '', notes: '' });
   const [extendLoading, setExtendLoading] = useState(false);
   const [formError, setFormError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -52,8 +54,11 @@ export default function useMyLoans() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLoans(res.data);
+      setSuccessMsg('Pengembalian berhasil!');
+      setTimeout(() => setSuccessMsg(''), 2000);
     } catch (err) {
-      alert('Gagal melakukan pengembalian');
+      setErrorMsg('Gagal melakukan pengembalian: ' + (err.response?.data?.message || err.message));
+      setTimeout(() => setErrorMsg(''), 2000);
     } finally {
       setReturnLoading(null);
     }
@@ -86,14 +91,16 @@ export default function useMyLoans() {
     setExtendLoading(true);
     try {
       await extendLoan(showExtendModal, { newEndDate: extendForm.newEndDate, notes: extendForm.notes });
-      alert('Permintaan perpanjangan berhasil diajukan!');
+      setSuccessMsg('Permintaan perpanjangan berhasil diajukan!');
+      setTimeout(() => setSuccessMsg(''), 2000);
       setShowExtendModal(null);
       setExtendForm({ newEndDate: '', notes: '' });
       const token = localStorage.getItem('token');
       const res = await api.get(`/loans/user/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
       setLoans(res.data);
     } catch (err) {
-      setFormError('Gagal memperpanjang: ' + (err.response?.data?.message || err.message));
+      setErrorMsg('Gagal memperpanjang: ' + (err.response?.data?.message || err.message));
+      setTimeout(() => setErrorMsg(''), 2000);
     } finally {
       setExtendLoading(false);
     }
@@ -120,5 +127,7 @@ export default function useMyLoans() {
     handleOpenExtendModal,
     handleExtendFormChange,
     handleExtendSubmit,
+    successMsg,
+    errorMsg,
   };
 } 

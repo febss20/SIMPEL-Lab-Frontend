@@ -39,9 +39,9 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
         return `${baseStyle} bg-green-100 text-green-800`;
       case 'in_use':
         return `${baseStyle} bg-blue-100 text-blue-800`;
-      case 'maintenance':
+      case 'under_maintenance':
         return `${baseStyle} bg-orange-100 text-orange-800`;
-      case 'broken':
+      case 'under_repair':
         return `${baseStyle} bg-red-100 text-red-800`;
       default:
         return `${baseStyle} bg-gray-100 text-gray-800`;

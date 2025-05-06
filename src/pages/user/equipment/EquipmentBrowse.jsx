@@ -4,6 +4,7 @@ import EquipmentLoanModal from '../../../components/user/equipment/EquipmentLoan
 import EquipmentRepairModal from '../../../components/user/equipment/EquipmentRepairModal';
 import useEquipmentBrowse from '../../../hooks/user/useEquipmentBrowse';
 import Modal from '../../../components/common/Modal';
+import IconButton from '../../../components/common/IconButton';
 
 const EquipmentBrowse = () => {
   const navigate = useNavigate();
@@ -42,9 +43,9 @@ const EquipmentBrowse = () => {
         return 'text-green-600 bg-green-100';
       case 'IN_USE':
         return 'text-yellow-600 bg-yellow-100';
-      case 'MAINTENANCE':
+      case 'UNDER_MAINTENANCE':
         return 'text-blue-600 bg-blue-100';
-      case 'BROKEN':
+      case 'UNDER_REPAIR':
         return 'text-red-600 bg-red-100';
       default:
         return 'text-gray-600 bg-gray-100';
@@ -180,11 +181,7 @@ const EquipmentBrowse = () => {
                           className="inline-flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors"
                           onClick={() => navigate(`/user/equipment/${eq.id}`)}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                          Detail
+                          <IconButton type="view" tooltip="Lihat Detail" size="sm" />
                         </button>
                         {eq.status === 'AVAILABLE' ? (
                           <button

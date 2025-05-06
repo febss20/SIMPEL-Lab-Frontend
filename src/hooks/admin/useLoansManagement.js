@@ -47,9 +47,17 @@ export default function useLoansManagement() {
   const handleUpdateStatus = async (id, status) => {
     try {
       await updateLoanStatus(id, status);
+      setSuccessMsg(
+        status === 'APPROVED'
+          ? 'Peminjaman berhasil di-approve!'
+          : status === 'REJECTED'
+          ? 'Peminjaman berhasil di-reject!'
+          : 'Status peminjaman berhasil diupdate!'
+      );
+      setTimeout(() => setSuccessMsg(''), 2000);
       fetchLoans();
     } catch (err) {
-      setError('Gagal memperbarui status peminjaman');
+      setError('Gagal memperbarui status peminjaman: ' + (err?.response?.data?.message || err.message));
     }
   };
 
@@ -177,5 +185,6 @@ export default function useLoansManagement() {
     confirmDelete,
     getStatusBadgeClass,
     exportToCSV,
+    handleUpdateStatus,
   };
 } 

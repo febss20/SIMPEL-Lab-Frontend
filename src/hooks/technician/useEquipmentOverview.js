@@ -96,11 +96,11 @@ export default function useEquipmentOverview() {
       });
       setShowMaintenanceModal(null);
       setMaintenanceForm({ scheduledDate: '', description: '', isPeriodic: false, notes: '' });
-      setSuccessMsg('Maintenance berhasil dijadwalkan!');
+      setSuccessMsg('Perawatan berhasil dijadwalkan!');
       fetchEquipment();
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err) {
-      setFormError('Gagal menjadwalkan maintenance: ' + (err.response?.data?.message || err.message));
+      setFormError('Gagal menjadwalkan perawatan: ' + (err.response?.data?.message || err.message));
     } finally {
       setLoadingAction(false);
     }

@@ -19,6 +19,8 @@ const LoanDetail = () => {
     handleReturn,
     handleExtendDateChange,
     handleExtend,
+    successMsg,
+    errorMsg,
   } = useLoanDetail(id, navigate);
 
   const getStatusColor = (status) => {
@@ -62,6 +64,22 @@ const LoanDetail = () => {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {successMsg && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-300 flex items-center animate-slideDown">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            {successMsg}
+          </div>
+        )}
+        {errorMsg && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-red-100 text-red-800 border border-red-300 flex items-center animate-slideDown">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M18 10A8 8 0 1110 2a8 8 0 018 8zm-4.293-1.707a1 1 0 00-1.414 1.414L11 11.586V7a1 1 0 10-2 0v4.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3z" clipRule="evenodd" />
+            </svg>
+            {errorMsg}
+          </div>
+        )}
         {loading ? (
           <div className="flex justify-center items-center py-20 animate-fadeIn">
             <div className="animate-pulse flex flex-col items-center">

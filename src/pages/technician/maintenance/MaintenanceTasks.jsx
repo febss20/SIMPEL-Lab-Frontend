@@ -106,12 +106,12 @@ const MaintenanceTasks = () => {
               <button
                 className="px-4 py-2 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 btn-pulse flex items-center"
                 onClick={() => setShowCreateModal(true)}
-                title="Jadwalkan Pemeliharaan"
+                title="Jadwalkan Perawatan"
               >
                 <svg className="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                Jadwalkan Pemeliharaan
+                Jadwalkan Perawatan
               </button>
             </div>
           </div>
@@ -396,7 +396,7 @@ const MaintenanceTasks = () => {
                                 <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                                 </svg>
-                                Jadwalkan Pemeliharaan Pertama
+                                Jadwalkan Perawatan Pertama
                               </button>
                             </div>
                           )}

@@ -10,6 +10,8 @@ export default function useLoanDetail(id, navigate) {
   const [extendDate, setExtendDate] = useState('');
   const [extendLoading, setExtendLoading] = useState(false);
   const [extendError, setExtendError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -37,9 +39,12 @@ export default function useLoanDetail(id, navigate) {
       await api.put(`/loans/${id}/return`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      navigate('/user/loans');
+      setSuccessMsg('Pengembalian berhasil!');
+      setTimeout(() => setSuccessMsg(''), 2000);
+      setTimeout(() => navigate('/user/loans'), 1000);
     } catch (err) {
-      alert('Gagal melakukan pengembalian');
+      setErrorMsg('Gagal melakukan pengembalian: ' + (err.response?.data?.message || err.message));
+      setTimeout(() => setErrorMsg(''), 2000);
     } finally {
       setReturnLoading(false);
     }
@@ -68,12 +73,15 @@ export default function useLoanDetail(id, navigate) {
       });
       setShowExtendModal(false);
       setExtendDate('');
+      setSuccessMsg('Permintaan perpanjangan berhasil diajukan!');
+      setTimeout(() => setSuccessMsg(''), 2000);
       const res = await api.get(`/loans/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLoan(res.data);
     } catch (err) {
-      setExtendError('Gagal memperpanjang pinjaman');
+      setErrorMsg('Gagal memperpanjang: ' + (err.response?.data?.message || err.message));
+      setTimeout(() => setErrorMsg(''), 2000);
     } finally {
       setExtendLoading(false);
     }
@@ -94,5 +102,7 @@ export default function useLoanDetail(id, navigate) {
     handleOpenExtendModal,
     handleExtendDateChange,
     handleExtend,
+    successMsg,
+    errorMsg,
   };
 } 

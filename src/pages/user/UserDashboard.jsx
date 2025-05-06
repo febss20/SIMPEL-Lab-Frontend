@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import api from '../../api/axios';
+import IconButton from '../../components/common/IconButton';
 
 const UserDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -228,11 +229,11 @@ const UserDashboard = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          <Link to={`/user/loans/${loan.id}`} className="text-indigo-600 hover:text-indigo-900 font-medium transition-colors hover:underline mr-3">
-                            Detail
+                          <Link to={`/user/loans/${loan.id}`}>
+                            <IconButton type="view" tooltip="Lihat Detail" size="sm" />
                           </Link>
                           {loan.status === 'active' && (
-                            <button className="text-green-600 hover:text-green-900 font-medium transition-colors hover:underline">
+                            <button className="text-green-600 hover:text-green-900 font-medium transition-colors hover:underline ml-3">
                               Kembalikan
                             </button>
                           )}
@@ -314,10 +315,7 @@ const UserDashboard = () => {
                       to={`/user/equipment/${item.id}`}
                       className="inline-flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors hover:underline"
                     >
-                      Detail
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                      </svg>
+                      <IconButton type="view" tooltip="Lihat Detail" size="sm" />
                     </Link>
                   </div>
                 </div>

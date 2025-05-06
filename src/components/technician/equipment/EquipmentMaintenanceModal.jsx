@@ -13,10 +13,10 @@ const EquipmentMaintenanceModal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fadeIn">
-        <h2 className="text-lg font-semibold mb-4">Jadwalkan Maintenance</h2>
+        <h2 className="text-lg font-semibold mb-4">Jadwalkan Perawatan</h2>
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Tanggal Maintenance</label>
+            <label className="block text-sm font-medium text-gray-700">Tanggal Perawatan</label>
             <input
               type="date"
               className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
