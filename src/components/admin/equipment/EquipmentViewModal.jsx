@@ -66,18 +66,18 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           >
             <div className="bg-gradient-to-r from-indigo-600 to-violet-500 p-6 rounded-t-2xl">
-              <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center">
                 <motion.h2 
                   className="text-2xl font-bold text-white flex items-center"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Detail Peralatan
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Detail Peralatan
                 </motion.h2>
                 <motion.button 
                   onClick={onClose} 
@@ -85,9 +85,9 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
                   whileHover={{ rotate: 90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
                 </motion.button>
               </div>
               
@@ -103,9 +103,9 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
                   onClick={() => setActiveTab('technical')}
                 >
                   Spesifikasi Teknis
-                </button>
-              </div>
-            </div>
+            </button>
+          </div>
+        </div>
             
             <div className="flex-1 overflow-y-auto p-6">
               {activeTab === 'details' && (
@@ -236,26 +236,26 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                           </svg>
-                        </div>
+            </div>
                         <div>
                           <p className="text-sm text-gray-500">Pabrikan</p>
                           <p className="font-medium text-gray-900">{data.manufacturer || '-'}</p>
-                        </div>
-                      </div>
+            </div>
+            </div>
                       
                       <div className="flex items-start">
                         <div className="bg-indigo-100 p-2 rounded-lg mr-3">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                           </svg>
-                        </div>
+            </div>
                         <div>
                           <p className="text-sm text-gray-500">Model</p>
                           <p className="font-medium text-gray-900">{data.model || '-'}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+            </div>
+            </div>
+          </div>
                   
                   <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Informasi Sistem</h3>
@@ -265,32 +265,32 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
-                        </div>
+            </div>
                         <div>
                           <p className="text-sm text-gray-500">Dibuat</p>
                           <p className="font-medium text-gray-900">{data.createdAt ? new Date(data.createdAt).toLocaleString('id-ID') : '-'}</p>
-                        </div>
-                      </div>
+            </div>
+            </div>
                       
                       <div className="flex items-start">
                         <div className="bg-purple-100 p-2 rounded-lg mr-3">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                           </svg>
-                        </div>
+            </div>
                         <div>
                           <p className="text-sm text-gray-500">Diubah</p>
                           <p className="font-medium text-gray-900">{data.updatedAt ? new Date(data.updatedAt).toLocaleString('id-ID') : '-'}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+            </div>
+          </div>
+        </div>
                 </motion.div>
               )}
             </div>
             
             <div className="bg-gray-50 px-6 py-4 rounded-b-2xl border-t">
-              <div className="flex justify-end">
+          <div className="flex justify-end">
                 <motion.button 
                   type="button" 
                   className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-500 hover:from-indigo-700 hover:to-violet-600 text-white rounded-lg shadow-md transition-all duration-200 flex items-center"
@@ -298,13 +298,13 @@ const EquipmentViewModal = ({ isOpen, onClose, data }) => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                  Tutup
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+              Tutup
                 </motion.button>
-              </div>
-            </div>
+          </div>
+        </div>
           </motion.div>
         </motion.div>
       )}

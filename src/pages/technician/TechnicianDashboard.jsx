@@ -210,7 +210,7 @@ const TechnicianDashboard = () => {
           <div className="bg-white rounded-xl shadow-md p-5 border border-gray-100 flex items-center card-hover animate-slideInLeft">
             <StatIcon type="pendingMaintenance" />
             <div className="ml-4">
-              <h3 className="text-sm font-medium text-gray-500">Perawatan Menunggu</h3>
+              <h3 className="text-sm font-medium text-gray-500">Pemeliharaan Menunggu</h3>
               <p className="text-2xl font-bold text-yellow-600">{stats.pendingMaintenance}</p>
             </div>
           </div>
@@ -218,7 +218,7 @@ const TechnicianDashboard = () => {
           <div className="bg-white rounded-xl shadow-md p-5 border border-gray-100 flex items-center card-hover animate-slideInLeft">
             <StatIcon type="completedMaintenance" />
             <div className="ml-4">
-              <h3 className="text-sm font-medium text-gray-500">Perawatan Selesai</h3>
+              <h3 className="text-sm font-medium text-gray-500">Pemeliharaan Selesai</h3>
               <p className="text-2xl font-bold text-green-600">{stats.completedMaintenance}</p>
             </div>
           </div>

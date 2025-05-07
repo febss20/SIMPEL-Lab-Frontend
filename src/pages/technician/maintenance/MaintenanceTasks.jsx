@@ -99,19 +99,19 @@ const MaintenanceTasks = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Perawatan</h1>
+              <h1 className="text-3xl font-bold">Pemeliharaan</h1>
               <p className="opacity-80">Mengelola semua jadwal dan aktivitas pemeliharaan peralatan</p>
             </div>
             <div className="ml-auto flex gap-2 items-center">
               <button
                 className="px-4 py-2 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 btn-pulse flex items-center"
                 onClick={() => setShowCreateModal(true)}
-                title="Jadwalkan Perawatan"
+                title="Jadwalkan Pemeliharaan"
               >
                 <svg className="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                Jadwalkan Perawatan
+                Jadwalkan Pemeliharaan
               </button>
             </div>
           </div>
@@ -257,7 +257,7 @@ const MaintenanceTasks = () => {
           <div className="flex justify-center items-center py-20 animate-fadeIn">
             <div className="animate-pulse flex flex-col items-center">
               <div className="h-16 w-16 rounded-full border-4 border-t-indigo-500 border-b-indigo-700 border-r-transparent border-l-transparent animate-spin"></div>
-              <p className="mt-4 text-gray-500 font-medium">Memuat data maintenance...</p>
+              <p className="mt-4 text-gray-500 font-medium">Memuat data pemeliharaan...</p>
             </div>
           </div>
         ) : (
@@ -323,7 +323,7 @@ const MaintenanceTasks = () => {
                                 className="flex items-center text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors"
                                 onClick={() => handleUpdateStatus(task, 'IN_PROGRESS')}
                                 disabled={loadingAction}
-                                title="Mulai Perawatan"
+                                title="Mulai Pemeliharaan"
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -337,7 +337,7 @@ const MaintenanceTasks = () => {
                                 className="flex items-center text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1 rounded transition-colors"
                                 onClick={() => handleUpdateStatus(task, 'COMPLETED')}
                                 disabled={loadingAction}
-                                title="Selesaikan Perawatan"
+                                title="Selesaikan Pemeliharaan"
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -350,7 +350,7 @@ const MaintenanceTasks = () => {
                                 className="flex items-center text-red-500 hover:text-white bg-red-100 hover:bg-red-600 px-2 py-1 rounded transition-colors ml-2"
                                 onClick={() => handleUpdateStatus(task, 'CANCELLED')}
                                 disabled={loadingAction}
-                                title="Batalkan Perawatan"
+                                title="Batalkan Pemeliharaan"
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -384,7 +384,7 @@ const MaintenanceTasks = () => {
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                           </svg>
-                          <p className="text-lg font-medium text-gray-500">Tidak ada task maintenance yang ditemukan</p>
+                          <p className="text-lg font-medium text-gray-500">Tidak ada pemeliharaan yang ditemukan</p>
                           {search || statusFilter || labFilter ? (
                             <p className="text-sm text-gray-400 mt-1">Coba ubah filter pencarian</p>
                           ) : (
@@ -396,7 +396,7 @@ const MaintenanceTasks = () => {
                                 <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                                 </svg>
-                                Jadwalkan Perawatan Pertama
+                                Jadwalkan Pemeliharaan Pertama
                               </button>
                             </div>
                           )}

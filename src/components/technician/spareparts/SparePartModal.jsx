@@ -30,7 +30,7 @@ const SparePartModal = ({
         <form onSubmit={onSubmit} className="p-6 max-h-[70vh] overflow-y-auto">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Perawatan</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Pemeliharaan</label>
               <select
                 name="maintenanceTaskId"
                 value={form.maintenanceTaskId}
@@ -38,7 +38,7 @@ const SparePartModal = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all appearance-none"
                 required
               >
-                <option value="">Pilih Perawatan</option>
+                <option value="">Pilih Pemeliharaan</option>
                 {maintenanceTasks.map(task => (
                   <option key={task.id} value={task.id}>{task.description}</option>
                 ))}
