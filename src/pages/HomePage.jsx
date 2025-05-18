@@ -162,7 +162,7 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
         >
-          &copy; {new Date().getFullYear()} Lab Manager. Semua hak dilindungi.
+          &copy; {new Date().getFullYear()} SIMPEL Lab Manager. Semua hak dilindungi.
         </motion.div>
       </div>
     </div>
