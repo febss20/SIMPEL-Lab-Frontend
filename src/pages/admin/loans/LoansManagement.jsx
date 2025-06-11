@@ -35,8 +35,25 @@ const LoansManagement = () => {
     confirmDelete,
     getStatusBadgeClass,
     exportToCSV,
-    handleUpdateStatus,
-    handleDecideExtend,
+    // Modal konfirmasi states
+    showApproveModal,
+    setShowApproveModal,
+    showRejectModal,
+    setShowRejectModal,
+    actionLoading,
+    showApproveExtendModal,
+    setShowApproveExtendModal,
+    showRejectExtendModal,
+    setShowRejectExtendModal,
+    // Modal konfirmasi handlers
+    handleApprove,
+    confirmApprove,
+    handleReject,
+    confirmReject,
+    handleApproveExtend,
+    confirmApproveExtend,
+    handleRejectExtend,
+    confirmRejectExtend,
   } = useLoansManagement();
 
   const columns = [
@@ -73,13 +90,13 @@ const LoansManagement = () => {
             <>
               <IconButton
                 type="approve"
-                onClick={() => handleDecideExtend(row.id, 'APPROVE')}
+                onClick={() => handleApproveExtend(row.id)}
                 tooltip="Approve Perpanjangan"
                 size="sm"
               />
               <IconButton
                 type="reject"
-                onClick={() => handleDecideExtend(row.id, 'REJECT')}
+                onClick={() => handleRejectExtend(row.id)}
                 tooltip="Reject Perpanjangan"
                 size="sm"
               />
@@ -88,13 +105,13 @@ const LoansManagement = () => {
             <>
               <IconButton
                 type="approve"
-                onClick={() => handleUpdateStatus(row.id, 'APPROVED')}
+                onClick={() => handleApprove(row.id)}
                 tooltip="Approve"
                 size="sm"
               />
               <IconButton
                 type="reject"
-                onClick={() => handleUpdateStatus(row.id, 'REJECTED')}
+                onClick={() => handleReject(row.id)}
                 tooltip="Reject"
                 size="sm"
               />
@@ -120,7 +137,7 @@ const LoansManagement = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-6">
+      <div className="py-6">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
           <PageHeader 
             title="Manajemen Peminjaman" 
@@ -197,9 +214,61 @@ const LoansManagement = () => {
           onCancel={() => handleDelete(null)}
           loading={deleteLoading}
         />
+        
+        {/* Modal Konfirmasi Approve */}
+        <ConfirmModal
+          isOpen={showApproveModal}
+          title="Konfirmasi Approve"
+          message="Apakah Anda yakin ingin menyetujui peminjaman ini?"
+          confirmText="Ya, Approve"
+          cancelText="Batal"
+          type="success"
+          onConfirm={confirmApprove}
+          onCancel={() => setShowApproveModal(false)}
+          loading={actionLoading}
+        />
+        
+        {/* Modal Konfirmasi Reject */}
+        <ConfirmModal
+          isOpen={showRejectModal}
+          title="Konfirmasi Reject"
+          message="Apakah Anda yakin ingin menolak peminjaman ini?"
+          confirmText="Ya, Reject"
+          cancelText="Batal"
+          type="warning"
+          onConfirm={confirmReject}
+          onCancel={() => setShowRejectModal(false)}
+          loading={actionLoading}
+        />
+        
+        {/* Modal Konfirmasi Approve Perpanjangan */}
+        <ConfirmModal
+          isOpen={showApproveExtendModal}
+          title="Konfirmasi Approve Perpanjangan"
+          message="Apakah Anda yakin ingin menyetujui perpanjangan peminjaman ini?"
+          confirmText="Ya, Approve"
+          cancelText="Batal"
+          type="success"
+          onConfirm={confirmApproveExtend}
+          onCancel={() => setShowApproveExtendModal(false)}
+          loading={actionLoading}
+        />
+        
+        {/* Modal Konfirmasi Reject Perpanjangan */}
+        <ConfirmModal
+          isOpen={showRejectExtendModal}
+          title="Konfirmasi Reject Perpanjangan"
+          message="Apakah Anda yakin ingin menolak perpanjangan peminjaman ini?"
+          confirmText="Ya, Reject"
+          cancelText="Batal"
+          type="warning"
+          onConfirm={confirmRejectExtend}
+          onCancel={() => setShowRejectExtendModal(false)}
+          loading={actionLoading}
+        />
       </div>
     </DashboardLayout>
   );
 };
 
-export default LoansManagement; 
+export default LoansManagement;

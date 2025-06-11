@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { getAllMaintenance, updateMaintenance, deleteMaintenance, createMaintenance } from '../../api/maintenance';
 import { getAllEquipment, getAllLabs } from '../../api/admin';
 
 export default function useMaintenanceTasks() {
+  const { user } = useSelector((state) => state.auth);
   const [tasks, setTasks] = useState([]);
   const [equipment, setEquipment] = useState([]);
   const [labs, setLabs] = useState([]);
@@ -137,7 +139,8 @@ export default function useMaintenanceTasks() {
         equipmentId: Number(createForm.equipmentId),
         scheduledDate: createForm.scheduledDate,
         description: createForm.description,
-        notes: createForm.notes
+        notes: createForm.notes,
+        technicianId: user.id
       });
       setShowCreateModal(false);
       setCreateForm({ equipmentId: '', scheduledDate: '', description: '', notes: '' });
@@ -190,4 +193,4 @@ export default function useMaintenanceTasks() {
     handleCreateChange,
     handleCreateSubmit,
   };
-} 
+}

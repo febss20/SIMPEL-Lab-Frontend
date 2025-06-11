@@ -12,6 +12,7 @@ const initialForm = {
   location: '',
   description: '',
   capacity: '',
+  image: '',
   createdAt: '',
   updatedAt: '',
 };
@@ -241,6 +242,23 @@ const LabManagement = () => {
                 <label className="block mb-1 text-sm font-medium text-gray-700">Kapasitas</label>
                 <input type="number" name="capacity" value={form.capacity} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" min="0" />
               </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">URL Gambar</label>
+                <input type="url" name="image" value={form.image} onChange={handleChange} className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="https://example.com/lab-image.jpg" />
+                <p className="text-xs text-gray-500 mt-1">Masukkan URL gambar laboratorium (opsional)</p>
+                {form.image && (
+                  <div className="mt-2">
+                    <img 
+                      src={form.image} 
+                      alt="Preview" 
+                      className="w-full h-32 object-cover rounded-md border"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
               {isEdit && (
                 <>
                   <div>
@@ -275,4 +293,4 @@ const LabManagement = () => {
   );
 };
 
-export default LabManagement; 
+export default LabManagement;

@@ -188,7 +188,7 @@ const AdminDashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-6">
+      <div className="py-6">
         <PageHeader 
           title={`Selamat datang, ${user?.firstName || 'Admin'}!`}
           icon={
@@ -291,4 +291,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard; 
+export default AdminDashboard;

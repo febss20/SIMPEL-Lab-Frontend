@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
+import { requestReschedule } from '../../api/loans';
 
 export default function useLoanDetail(id, navigate) {
   const [loan, setLoan] = useState(null);
@@ -12,6 +13,12 @@ export default function useLoanDetail(id, navigate) {
   const [extendError, setExtendError] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  
+  // State untuk reschedule
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [rescheduleForm, setRescheduleForm] = useState({ newStartDate: '', newEndDate: '', reason: '' });
+  const [rescheduleLoading, setRescheduleLoading] = useState(false);
+  const [rescheduleError, setRescheduleError] = useState(null);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -87,6 +94,44 @@ export default function useLoanDetail(id, navigate) {
     }
   };
 
+  const handleOpenRescheduleModal = () => {
+    setShowRescheduleModal(true);
+    setRescheduleForm({ newStartDate: '', newEndDate: '', reason: '' });
+    setRescheduleError(null);
+  };
+
+  const handleRescheduleFormChange = (e) => {
+    const { name, value } = e.target;
+    setRescheduleForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleReschedule = async (e) => {
+    e.preventDefault();
+    setRescheduleLoading(true);
+    setRescheduleError(null);
+    try {
+      await requestReschedule(id, rescheduleForm);
+      setShowRescheduleModal(false);
+      setRescheduleForm({ newStartDate: '', newEndDate: '', reason: '' });
+      setSuccessMsg('Permintaan penjadwalan ulang berhasil diajukan!');
+      setTimeout(() => setSuccessMsg(''), 2000);
+      
+      // Refresh loan data
+      const token = localStorage.getItem('token');
+      const res = await api.get(`/loans/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLoan(res.data);
+    } catch (err) {
+      setRescheduleError('Gagal mengajukan penjadwalan ulang: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setRescheduleLoading(false);
+    }
+  };
+
   return {
     loan,
     loading,
@@ -104,5 +149,14 @@ export default function useLoanDetail(id, navigate) {
     handleExtend,
     successMsg,
     errorMsg,
+    // Reschedule properties
+    showRescheduleModal,
+    setShowRescheduleModal,
+    rescheduleForm,
+    rescheduleLoading,
+    rescheduleError,
+    handleOpenRescheduleModal,
+    handleRescheduleFormChange,
+    handleReschedule
   };
-} 
+}

@@ -107,7 +107,7 @@ const UsersManagement = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-6">
+      <div className="py-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <PageHeader
             title="Manajemen Pengguna"
@@ -190,4 +190,4 @@ const UsersManagement = () => {
   );
 };
 
-export default UsersManagement; 
+export default UsersManagement;

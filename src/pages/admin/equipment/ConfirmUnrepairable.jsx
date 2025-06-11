@@ -89,7 +89,7 @@ const ConfirmUnrepairable = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-6">
+      <div className="py-6">
         <PageHeader title="Konfirmasi Rusak Permanen" icon={
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-1.414 1.414A9 9 0 105.636 18.364l1.414-1.414A7 7 0 1116.95 7.05z" />
@@ -121,4 +121,4 @@ const ConfirmUnrepairable = () => {
   );
 };
 
-export default ConfirmUnrepairable; 
+export default ConfirmUnrepairable;

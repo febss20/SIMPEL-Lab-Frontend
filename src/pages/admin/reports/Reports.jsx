@@ -117,7 +117,7 @@ const Reports = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-6">
+      <div className="py-6">
         <div className="flex justify-between items-center">
           <PageHeader 
             title="Laporan dan Statistik"
@@ -280,4 +280,4 @@ const Reports = () => {
   );
 };
 
-export default Reports; 
+export default Reports;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { login } from '../../store/slices/authSlice';
+import BiometricLogin from '../../components/auth/BiometricLogin';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -103,7 +104,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center relative overflow-hidden p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center relative overflow-hidden p-4" style={{overflowX: 'hidden'}}>
       {generateParticles()}
       
       <div className="absolute inset-0 overflow-hidden">
@@ -181,7 +182,14 @@ const LoginPage = () => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    className="bg-white/5 text-white pl-10 w-full border border-white/10 rounded-lg py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                    className="bg-white/5 text-white pl-10 w-full border border-white/10 rounded-lg py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors duration-200 outline-none"
+                    style={{
+                      willChange: 'auto',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      WebkitBackfaceVisibility: 'hidden',
+                      WebkitTransform: 'translateZ(0)'
+                    }}
                     required
                     placeholder="Masukkan username"
                   />
@@ -204,7 +212,7 @@ const LoginPage = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="bg-white/5 text-white pl-10 w-full border border-white/10 rounded-lg py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                    className="bg-white/5 text-white pl-10 w-full border border-white/10 rounded-lg py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors duration-200 outline-none"
                     required
                     placeholder="Masukkan password"
                   />
@@ -238,6 +246,23 @@ const LoginPage = () => {
             </form>
           </div>
           
+          {/* Biometric Login Section */}
+          <div className="p-6 border-t border-white/10 bg-black/5">
+            <BiometricLogin 
+              username={formData.username}
+              onSuccess={(result) => {
+                // Handle successful biometric authentication
+                if (result.user && result.token) {
+                  localStorage.setItem('token', result.token);
+                  handleSuccessfulLogin(result.user);
+                }
+              }}
+              onError={(error) => {
+                console.error('Biometric authentication error:', error);
+              }}
+            />
+          </div>
+          
           <div className="p-6 border-t border-white/10 bg-black/5">
             <div className="text-center">
               <Link to="/register" className="inline-flex items-center text-indigo-300 hover:text-white transition-colors">
@@ -267,4 +292,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;

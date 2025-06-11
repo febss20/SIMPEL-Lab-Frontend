@@ -15,6 +15,13 @@ export default function useLoansManagement() {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedLoanId, setSelectedLoanId] = useState(null);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [showApproveExtendModal, setShowApproveExtendModal] = useState(false);
+  const [showRejectExtendModal, setShowRejectExtendModal] = useState(false);
   const statusOptions = ['PENDING', 'APPROVED', 'ACTIVE', 'RETURNED', 'REJECTED', 'OVERDUE'];
 
   const fetchLoans = async () => {
@@ -73,6 +80,98 @@ export default function useLoansManagement() {
       fetchLoans();
     } catch (err) {
       setError('Gagal memperbarui status perpanjangan: ' + (err?.response?.data?.message || err.message));
+    }
+  };
+
+  // Handler untuk modal approve peminjaman
+  const handleApprove = (id) => {
+    setSelectedLoanId(id);
+    setShowApproveModal(true);
+  };
+
+  const confirmApprove = async () => {
+    if (!selectedLoanId) return;
+    setActionLoading(true);
+    try {
+      await updateLoanStatus(selectedLoanId, 'APPROVED');
+      setSuccessMsg('Peminjaman berhasil di-approve!');
+      fetchLoans();
+      setShowApproveModal(false);
+      setTimeout(() => setSuccessMsg(''), 2000);
+    } catch (err) {
+      setError('Gagal approve peminjaman: ' + (err?.response?.data?.message || err.message));
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handler untuk modal reject peminjaman
+  const handleReject = (id) => {
+    setSelectedLoanId(id);
+    setShowRejectModal(true);
+    setRejectionReason('');
+  };
+
+  const confirmReject = async () => {
+    if (!selectedLoanId) return;
+    setActionLoading(true);
+    try {
+      await updateLoanStatus(selectedLoanId, 'REJECTED', rejectionReason);
+      setSuccessMsg('Peminjaman berhasil di-reject!');
+      fetchLoans();
+      setShowRejectModal(false);
+      setRejectionReason('');
+      setTimeout(() => setSuccessMsg(''), 2000);
+    } catch (err) {
+      setError('Gagal reject peminjaman: ' + (err?.response?.data?.message || err.message));
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handler untuk modal approve perpanjangan
+  const handleApproveExtend = (id) => {
+    setSelectedLoanId(id);
+    setShowApproveExtendModal(true);
+  };
+
+  const confirmApproveExtend = async () => {
+    if (!selectedLoanId) return;
+    setActionLoading(true);
+    try {
+      await decideExtendLoan(selectedLoanId, 'APPROVE');
+      setSuccessMsg('Perpanjangan berhasil di-approve!');
+      fetchLoans();
+      setShowApproveExtendModal(false);
+      setTimeout(() => setSuccessMsg(''), 2000);
+    } catch (err) {
+      setError('Gagal approve perpanjangan: ' + (err?.response?.data?.message || err.message));
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handler untuk modal reject perpanjangan
+  const handleRejectExtend = (id) => {
+    setSelectedLoanId(id);
+    setShowRejectExtendModal(true);
+    setRejectionReason('');
+  };
+
+  const confirmRejectExtend = async () => {
+    if (!selectedLoanId) return;
+    setActionLoading(true);
+    try {
+      await decideExtendLoan(selectedLoanId, 'REJECT');
+      setSuccessMsg('Perpanjangan berhasil di-reject!');
+      fetchLoans();
+      setShowRejectExtendModal(false);
+      setRejectionReason('');
+      setTimeout(() => setSuccessMsg(''), 2000);
+    } catch (err) {
+      setError('Gagal reject perpanjangan: ' + (err?.response?.data?.message || err.message));
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -202,5 +301,24 @@ export default function useLoansManagement() {
     exportToCSV,
     handleUpdateStatus,
     handleDecideExtend,
+    // Modal konfirmasi states
+    showApproveModal,
+    setShowApproveModal,
+    showRejectModal,
+    setShowRejectModal,
+    actionLoading,
+    showApproveExtendModal,
+    setShowApproveExtendModal,
+    showRejectExtendModal,
+    setShowRejectExtendModal,
+    // Modal konfirmasi handlers
+    handleApprove,
+    confirmApprove,
+    handleReject,
+    confirmReject,
+    handleApproveExtend,
+    confirmApproveExtend,
+    handleRejectExtend,
+    confirmRejectExtend,
   };
-} 
+}

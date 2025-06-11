@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser } from './store/slices/authSlice';
 import './App.css';
 import './utils/animations.css';
 
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
+import LoginPage from './pages/auth/Login';
+import RegisterPage from './pages/auth/Register';
 import DebugPage from './pages/DebugPage';
 import HomePage from './pages/HomePage';
 
@@ -33,7 +33,17 @@ import MaintenanceTaskDetail from './pages/technician/maintenance/MaintenanceTas
 import RepairDetail from './pages/technician/repairs/RepairDetail';
 import EquipmentDetailTechnician from './pages/technician/equipment/EquipmentDetail';
 
+// Lab Booking Pages
+import LabList from './pages/user/lab/LabList';
+import LabBooking from './pages/user/lab/LabBooking';
+import UserBookings from './pages/user/lab/UserBookings';
+import LabBookingsManagement from './pages/admin/labs/LabBookingsManagement';
+import Notifications from './pages/user/notifications/Notifications';
+import AdminNotifications from './pages/admin/notifications/AdminNotifications';
+import TechnicianNotifications from './pages/technician/notifications/TechnicianNotifications';
+
 import RoleRoute from './components/common/RoleRoute';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 
 function App() {
@@ -203,6 +213,28 @@ function App() {
           } 
         />
         
+        {/* Technician Message Routes */}
+        <Route 
+          path="/technician/messages" 
+          element={
+            <RoleRoute roles="TECHNICIAN">
+              <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                {React.createElement(React.lazy(() => import('./pages/technician/messages/Messages')))}
+              </Suspense>
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/technician/messages/:userId" 
+          element={
+            <RoleRoute roles="TECHNICIAN">
+              <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                {React.createElement(React.lazy(() => import('./pages/technician/messages/Messages')))}
+              </Suspense>
+            </RoleRoute>
+          } 
+        />
+        
         <Route 
           path="/user" 
           element={
@@ -250,6 +282,89 @@ function App() {
           } 
         />
         
+        {/* Lab Booking Routes */}
+        <Route 
+          path="/user/lab" 
+          element={
+            <RoleRoute roles="USER">
+              <LabList />
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/user/lab/:labId/book" 
+          element={
+            <RoleRoute roles="USER">
+              <LabBooking />
+            </RoleRoute>
+          } 
+        />
+        <Route path="/admin/labs/bookings" element={<ProtectedRoute allowedRoles={['ADMIN']}><LabBookingsManagement /></ProtectedRoute>} />
+        <Route 
+          path="/user/lab/bookings" 
+          element={
+            <RoleRoute roles="USER">
+              <UserBookings />
+            </RoleRoute>
+          } 
+        />
+        
+        {/* Message Routes */}
+        <Route 
+          path="/user/notifications" 
+          element={
+            <RoleRoute roles="USER">
+              <Notifications />
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/admin/notifications" 
+          element={
+            <RoleRoute roles="ADMIN">
+              <AdminNotifications />
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/technician/notifications" 
+          element={
+            <RoleRoute roles="TECHNICIAN">
+              <TechnicianNotifications />
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/user/messages" 
+          element={
+            <RoleRoute roles="USER">
+              <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                {React.createElement(React.lazy(() => import('./pages/user/messages/Messages')))}
+              </Suspense>
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/user/messages/new" 
+          element={
+            <RoleRoute roles="USER">
+              <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                {React.createElement(React.lazy(() => import('./pages/user/messages/NewMessage')))}
+              </Suspense>
+            </RoleRoute>
+          } 
+        />
+        <Route 
+          path="/user/messages/:userId" 
+          element={
+            <RoleRoute roles="USER">
+              <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                {React.createElement(React.lazy(() => import('./pages/user/messages/Messages')))}
+              </Suspense>
+            </RoleRoute>
+          } 
+        />
+        
         <Route path="*" element={
           <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="text-center">
@@ -269,4 +384,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

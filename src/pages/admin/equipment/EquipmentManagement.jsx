@@ -94,7 +94,7 @@ const EquipmentManagement = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-6">
+      <div className="py-6">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
           <PageHeader 
             title="Manajemen Peralatan" 
@@ -194,4 +194,4 @@ const EquipmentManagement = () => {
   );
 };
 
-export default EquipmentManagement; 
+export default EquipmentManagement;

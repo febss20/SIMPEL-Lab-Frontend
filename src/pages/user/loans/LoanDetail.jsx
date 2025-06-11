@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../../components/layouts/DashboardLayout';
 import useLoanDetail from '../../../hooks/user/useLoanDetail';
 import LoanExtendModal from '../../../components/user/loans/LoanExtendModal';
+import LoanRescheduleModal from '../../../components/user/loans/LoanRescheduleModal';
 
 const LoanDetail = () => {
   const { id } = useParams();
@@ -21,6 +22,15 @@ const LoanDetail = () => {
     handleExtend,
     successMsg,
     errorMsg,
+    // Reschedule properties
+    showRescheduleModal,
+    setShowRescheduleModal,
+    rescheduleForm,
+    rescheduleLoading,
+    rescheduleError,
+    handleOpenRescheduleModal,
+    handleRescheduleFormChange,
+    handleReschedule
   } = useLoanDetail(id, navigate);
 
   const getStatusColor = (status) => {
@@ -277,6 +287,17 @@ const LoanDetail = () => {
                         Perpanjang
                       </button>
                     )}
+                    {(loan.status === 'ACTIVE' || loan.status === 'APPROVED') && (
+                      <button
+                        className="px-4 py-2 rounded-lg flex items-center font-medium bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
+                        onClick={handleOpenRescheduleModal}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Jadwal Ulang
+                      </button>
+                    )}
                     {loan.status === 'ACTIVE' && !loan.requestedEndDate && (
                       <button
                         className="px-4 py-2 rounded-lg flex items-center font-medium bg-gradient-to-r from-green-600 to-teal-500 text-white hover:from-green-700 hover:to-teal-600 transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
@@ -316,9 +337,21 @@ const LoanDetail = () => {
           error={extendError}
           oldEndDate={loan ? new Date(loan.endDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
         />
+        
+        <LoanRescheduleModal
+          isOpen={showRescheduleModal}
+          form={rescheduleForm}
+          onChange={handleRescheduleFormChange}
+          onClose={() => setShowRescheduleModal(false)}
+          onSubmit={handleReschedule}
+          loading={rescheduleLoading}
+          error={rescheduleError}
+          oldStartDate={loan ? new Date(loan.startDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+          oldEndDate={loan ? new Date(loan.endDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+        />
       </div>
     </DashboardLayout>
   );
 };
 
-export default LoanDetail; 
+export default LoanDetail;
