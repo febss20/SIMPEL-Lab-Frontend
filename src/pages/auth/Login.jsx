@@ -251,7 +251,6 @@ const LoginPage = () => {
             <BiometricLogin 
               username={formData.username}
               onSuccess={(result) => {
-                // Handle successful biometric authentication
                 if (result.user && result.token) {
                   localStorage.setItem('token', result.token);
                   handleSuccessfulLogin(result.user);

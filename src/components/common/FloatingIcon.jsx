@@ -8,7 +8,6 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   const iconRef = useRef(null);
 
-  // Load saved position from localStorage on component mount
   useEffect(() => {
     const savedPos = localStorage.getItem('floatingIconPosition');
     if (savedPos) {
@@ -19,17 +18,14 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
         console.error('Error parsing saved position:', error);
       }
     } else {
-      // Default position if not saved before
       setPosition({ x: window.innerWidth - 100, y: window.innerHeight - 100 });
     }
   }, []);
 
-  // Handle mouse down event to start dragging
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
     
-    // Calculate the initial position where the user clicked on the icon
     const rect = iconRef.current.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
@@ -37,7 +33,6 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
     setInitialPosition({ x: offsetX, y: offsetY });
   };
 
-  // Handle touch start event for mobile devices
   const handleTouchStart = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -50,14 +45,12 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
     setInitialPosition({ x: offsetX, y: offsetY });
   };
 
-  // Handle mouse move event during dragging
   const handleMouseMove = useCallback((e) => {
     if (!isDragging) return;
     
     const newX = e.clientX - initialPosition.x;
     const newY = e.clientY - initialPosition.y;
     
-    // Ensure the icon stays within the viewport
     const maxX = window.innerWidth - iconRef.current.offsetWidth;
     const maxY = window.innerHeight - iconRef.current.offsetHeight;
     
@@ -67,7 +60,6 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
     setPosition({ x: boundedX, y: boundedY });
   }, [isDragging, initialPosition.x, initialPosition.y]);
 
-  // Handle touch move event for mobile devices
   const handleTouchMove = useCallback((e) => {
     if (!isDragging) return;
     
@@ -75,7 +67,6 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
     const newX = touch.clientX - initialPosition.x;
     const newY = touch.clientY - initialPosition.y;
     
-    // Ensure the icon stays within the viewport
     const maxX = window.innerWidth - iconRef.current.offsetWidth;
     const maxY = window.innerHeight - iconRef.current.offsetHeight;
     
@@ -85,16 +76,13 @@ const FloatingIcon = ({ icon, to, title, color = 'indigo', showBadge = false, ba
     setPosition({ x: boundedX, y: boundedY });
   }, [isDragging, initialPosition.x, initialPosition.y]);
 
-  // Handle mouse up event to stop dragging and save position
   const handleMouseUp = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
-      // Save position to localStorage
       localStorage.setItem('floatingIconPosition', JSON.stringify(position));
     }
   }, [isDragging, position]);
 
-  // Add event listeners for dragging
   useEffect(() => {
     if (isDragging) {
       window.addEventListener('mousemove', handleMouseMove);

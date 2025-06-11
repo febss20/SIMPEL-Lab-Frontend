@@ -1,14 +1,6 @@
 import api from './axios';
 
-/**
- * Service untuk menangani autentikasi biometrik menggunakan WebAuthn API
- * Implementasi berdasarkan use case "Registrasi dan Login" dengan dukungan biometric
- */
 class BiometricService {
-  /**
-   * Mengecek apakah browser mendukung WebAuthn
-   * @returns {boolean} true jika browser mendukung WebAuthn
-   */
   static isSupported() {
     return (
       window.PublicKeyCredential &&
@@ -18,10 +10,6 @@ class BiometricService {
     );
   }
 
-  /**
-   * Mengecek apakah perangkat memiliki authenticator platform (biometric)
-   * @returns {Promise<boolean>} true jika perangkat mendukung biometric
-   */
   static async isPlatformAuthenticatorAvailable() {
     if (!this.isSupported()) return false;
     
@@ -33,14 +21,8 @@ class BiometricService {
     }
   }
 
-  /**
-   * Mendaftarkan credential biometric untuk user
-   * @param {string} username - Username pengguna
-   * @returns {Promise<Object>} Response dari server
-   */
   static async registerBiometric(username) {
     try {
-      // 1. Dapatkan registration options dari server
       const optionsResponse = await api.post('/auth/biometric/register-options', {
         username
       });
@@ -49,8 +31,7 @@ class BiometricService {
       const options = responseData.options || responseData;
       
       console.log('Registration options received:', options);
-      
-      // 2. Konversi base64 ke ArrayBuffer untuk WebAuthn
+    
       const publicKeyCredentialCreationOptions = {
         ...options,
         challenge: this.base64ToArrayBuffer(options.challenge),
@@ -64,7 +45,6 @@ class BiometricService {
         })) || []
       };
 
-      // 3. Buat credential menggunakan WebAuthn
       const credential = await navigator.credentials.create({
         publicKey: publicKeyCredentialCreationOptions
       });
@@ -73,7 +53,7 @@ class BiometricService {
         throw new Error('Gagal membuat credential biometric');
       }
 
-      // 4. Konversi credential ke format yang bisa dikirim ke server
+
       const credentialData = {
         id: credential.id,
         rawId: this.arrayBufferToBase64(credential.rawId),
@@ -84,7 +64,6 @@ class BiometricService {
         type: credential.type
       };
 
-      // 5. Kirim credential ke server untuk verifikasi dan penyimpanan
       const verificationResponse = await api.post('/auth/biometric/register-verify', {
         username,
         credential: credentialData
@@ -101,14 +80,8 @@ class BiometricService {
     }
   }
 
-  /**
-   * Melakukan login menggunakan biometric
-   * @param {string} username - Username pengguna
-   * @returns {Promise<Object>} Response login dari server
-   */
   static async loginWithBiometric(username) {
     try {
-      // 1. Dapatkan authentication options dari server
       const optionsResponse = await api.post('/auth/biometric/login-options', {
         username
       });
@@ -118,7 +91,6 @@ class BiometricService {
       
       console.log('Authentication options received:', options);
       
-      // 2. Konversi base64 ke ArrayBuffer untuk WebAuthn
       const publicKeyCredentialRequestOptions = {
         ...options,
         challenge: this.base64ToArrayBuffer(options.challenge),
@@ -128,7 +100,6 @@ class BiometricService {
         })) || []
       };
 
-      // 3. Dapatkan credential menggunakan WebAuthn (biometric authentication)
       const assertion = await navigator.credentials.get({
         publicKey: publicKeyCredentialRequestOptions
       });
@@ -137,7 +108,6 @@ class BiometricService {
         throw new Error('Autentikasi biometric dibatalkan atau gagal');
       }
 
-      // 4. Konversi assertion ke format yang bisa dikirim ke server
       const assertionData = {
         id: assertion.id,
         rawId: this.arrayBufferToBase64(assertion.rawId),
@@ -151,13 +121,11 @@ class BiometricService {
         type: assertion.type
       };
 
-      // 5. Kirim assertion ke server untuk verifikasi
       const verificationResponse = await api.post('/auth/biometric/login-verify', {
         username,
         assertion: assertionData
       });
 
-      // 6. Simpan token dan user data seperti login biasa
       if (verificationResponse.data.token) {
         localStorage.setItem('token', verificationResponse.data.token);
         localStorage.setItem('user', JSON.stringify(verificationResponse.data.user));
@@ -174,11 +142,6 @@ class BiometricService {
     }
   }
 
-  /**
-   * Mengecek apakah user sudah mendaftarkan biometric
-   * @param {string} username - Username pengguna
-   * @returns {Promise<boolean>} true jika user sudah mendaftarkan biometric
-   */
   static async hasBiometricCredential(username) {
     try {
       const response = await api.get(`/auth/biometric/check/${username}`);
@@ -189,11 +152,6 @@ class BiometricService {
     }
   }
 
-  /**
-   * Menghapus credential biometric user
-   * @param {string} username - Username pengguna
-   * @returns {Promise<Object>} Response dari server
-   */
   static async removeBiometricCredential(username) {
     try {
       const response = await api.delete(`/auth/biometric/remove/${username}`);
@@ -207,7 +165,6 @@ class BiometricService {
     }
   }
 
-  // Utility functions untuk konversi data
   static arrayBufferToBase64(buffer) {
     const bytes = new Uint8Array(buffer);
     let binary = '';
@@ -218,7 +175,6 @@ class BiometricService {
   }
 
   static base64ToArrayBuffer(base64) {
-    // Validasi input base64
     if (!base64 || typeof base64 !== 'string') {
       console.error('Invalid base64 input:', { base64, type: typeof base64 });
       throw new Error(`Invalid base64 string provided. Received: ${typeof base64} - ${JSON.stringify(base64)}`);
@@ -230,19 +186,15 @@ class BiometricService {
     }
     
     try {
-      // Konversi base64url ke base64 standar jika diperlukan
       let standardBase64 = base64;
       
-      // Cek apakah ini base64url (tidak ada padding dan menggunakan - dan _)
       if (base64.includes('-') || base64.includes('_') || !base64.includes('=')) {
-        // Konversi base64url ke base64 standar
         standardBase64 = base64
           .replace(/-/g, '+')
           .replace(/_/g, '/')
           .padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
       }
       
-      // Bersihkan base64 string dari whitespace dan karakter tidak valid
       const cleanBase64 = standardBase64.replace(/[^A-Za-z0-9+/=]/g, '');
       
       const binaryString = atob(cleanBase64);

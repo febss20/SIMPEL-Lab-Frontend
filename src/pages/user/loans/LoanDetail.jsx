@@ -22,7 +22,6 @@ const LoanDetail = () => {
     handleExtend,
     successMsg,
     errorMsg,
-    // Reschedule properties
     showRescheduleModal,
     setShowRescheduleModal,
     rescheduleForm,

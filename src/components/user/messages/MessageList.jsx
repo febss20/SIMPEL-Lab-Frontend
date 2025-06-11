@@ -5,7 +5,6 @@ const MessageList = ({ messages, loading }) => {
   const { user } = useSelector((state) => state.auth);
   const messagesEndRef = useRef(null);
 
-  // Scroll ke pesan terbaru saat pesan berubah
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -38,7 +37,6 @@ const MessageList = ({ messages, loading }) => {
     );
   }
 
-  // Mengelompokkan pesan berdasarkan tanggal
   const groupedMessages = messages.reduce((groups, message) => {
     const date = new Date(message.createdAt).toLocaleDateString('id-ID', {
       weekday: 'long',

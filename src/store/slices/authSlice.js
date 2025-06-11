@@ -57,7 +57,6 @@ export const fetchCurrentUser = createAsyncThunk(
   }
 );
 
-// Biometric Authentication Actions
 export const registerBiometric = createAsyncThunk(
   'auth/registerBiometric',
   async (username, { rejectWithValue }) => {
@@ -172,7 +171,6 @@ const authSlice = createSlice({
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       })
-      // Biometric Authentication Cases
       .addCase(checkBiometricSupport.pending, (state) => {
         state.biometric.isLoading = true;
         state.biometric.error = null;

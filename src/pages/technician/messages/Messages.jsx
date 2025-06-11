@@ -15,14 +15,12 @@ const Messages = () => {
   const [error, setError] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
 
-  // Efek untuk memuat pesan saat userId berubah
   useEffect(() => {
     if (selectedUserId) {
       fetchMessages(selectedUserId);
     }
   }, [selectedUserId]);
 
-  // Efek untuk memperbarui URL saat selectedUserId berubah
   useEffect(() => {
     if (selectedUserId) {
       navigate(`/technician/messages/${selectedUserId}`);
@@ -31,7 +29,6 @@ const Messages = () => {
     }
   }, [selectedUserId, navigate]);
 
-  // Fungsi untuk memuat pesan dari percakapan tertentu
   const fetchMessages = async (userId) => {
     try {
       setLoading(true);
@@ -46,7 +43,6 @@ const Messages = () => {
     }
   };
 
-  // Fungsi untuk mengirim pesan
   const handleSendMessage = async (content) => {
     if (!selectedUserId || !content.trim()) return;
 
@@ -62,7 +58,6 @@ const Messages = () => {
     }
   };
 
-  // Fungsi untuk memilih percakapan
   const handleSelectConversation = (userId) => {
     setSelectedUserId(userId);
   };

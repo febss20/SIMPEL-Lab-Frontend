@@ -17,7 +17,6 @@ const UserBookings = () => {
   useEffect(() => {
     fetchBookings();
     
-    // Clear location state after reading it
     if (location.state?.success) {
       window.history.replaceState({}, document.title);
     }
@@ -42,7 +41,6 @@ const UserBookings = () => {
     try {
       await cancelBooking(bookingId);
       setSuccessMessage('Booking berhasil dibatalkan');
-      // Update the booking status in the list
       setBookings(bookings.map(booking => 
         booking.id === bookingId ? { ...booking, status: 'CANCELLED' } : booking
       ));
@@ -59,14 +57,12 @@ const UserBookings = () => {
     : bookings.filter(booking => booking.status === statusFilter);
 
   const sortedBookings = [...filteredBookings].sort((a, b) => {
-    // Sort by status (PENDING and APPROVED first)
     const statusOrder = { 'PENDING': 0, 'APPROVED': 1 };
     const statusA = statusOrder[a.status] !== undefined ? statusOrder[a.status] : 2;
     const statusB = statusOrder[b.status] !== undefined ? statusOrder[b.status] : 2;
     
     if (statusA !== statusB) return statusA - statusB;
     
-    // Then sort by date (newest first)
     return new Date(b.startTime) - new Date(a.startTime);
   });
 

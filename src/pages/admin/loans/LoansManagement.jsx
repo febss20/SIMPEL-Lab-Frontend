@@ -35,7 +35,6 @@ const LoansManagement = () => {
     confirmDelete,
     getStatusBadgeClass,
     exportToCSV,
-    // Modal konfirmasi states
     showApproveModal,
     setShowApproveModal,
     showRejectModal,
@@ -45,7 +44,6 @@ const LoansManagement = () => {
     setShowApproveExtendModal,
     showRejectExtendModal,
     setShowRejectExtendModal,
-    // Modal konfirmasi handlers
     handleApprove,
     confirmApprove,
     handleReject,

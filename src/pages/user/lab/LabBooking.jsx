@@ -58,7 +58,6 @@ const LabBooking = () => {
   };
 
   const handleSubmit = async () => {
-    // Validate form
     if (!selectedTimeSlot) {
       setFormError('Silakan pilih waktu booking terlebih dahulu');
       return;

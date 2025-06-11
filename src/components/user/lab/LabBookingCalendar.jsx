@@ -12,13 +12,11 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [selectedDuration, setSelectedDuration] = useState(1);
 
-  // Time slots from 08:00 to 17:00 with 1-hour intervals
   const timeSlots = [
     '08:00', '09:00', '10:00', '11:00', '12:00',
     '13:00', '14:00', '15:00', '16:00', '17:00'
   ];
 
-  // Duration options (1-8 hours)
   const durationOptions = [
     { value: 1, label: '1 Jam' },
     { value: 2, label: '2 Jam' },
@@ -87,21 +85,19 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
 
   const handleDurationChange = (duration) => {
     setSelectedDuration(duration);
-    setSelectedSlot(null); // Reset selected slot when duration changes
+    setSelectedSlot(null);
   };
 
   const isSlotAvailable = (slot, duration = 1) => {
     const [hours] = slot.split(':').map(Number);
     const endHour = hours + duration;
     
-    // Check if the booking would exceed operating hours (17:00)
     if (endHour > 17) {
       return false;
     }
     
     if (!availableSlots || availableSlots.length === 0) return true;
     
-    // Check if all required consecutive slots are available
     for (let i = 0; i < duration; i++) {
       const checkHour = hours + i;
       const checkSlot = `${checkHour.toString().padStart(2, '0')}:00`;
@@ -121,7 +117,7 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
 
   const generateWeekDays = () => {
     const days = [];
-    let start = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start from Monday
+    let start = startOfWeek(currentDate, { weekStartsOn: 1 }); 
     
     for (let i = 0; i < 7; i++) {
       const day = addDays(start, i);

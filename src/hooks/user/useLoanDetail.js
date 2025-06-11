@@ -14,7 +14,6 @@ export default function useLoanDetail(id, navigate) {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   
-  // State untuk reschedule
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [rescheduleForm, setRescheduleForm] = useState({ newStartDate: '', newEndDate: '', reason: '' });
   const [rescheduleLoading, setRescheduleLoading] = useState(false);
@@ -119,7 +118,6 @@ export default function useLoanDetail(id, navigate) {
       setSuccessMsg('Permintaan penjadwalan ulang berhasil diajukan!');
       setTimeout(() => setSuccessMsg(''), 2000);
       
-      // Refresh loan data
       const token = localStorage.getItem('token');
       const res = await api.get(`/loans/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -149,7 +147,6 @@ export default function useLoanDetail(id, navigate) {
     handleExtend,
     successMsg,
     errorMsg,
-    // Reschedule properties
     showRescheduleModal,
     setShowRescheduleModal,
     rescheduleForm,

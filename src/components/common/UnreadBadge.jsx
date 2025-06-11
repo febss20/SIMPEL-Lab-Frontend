@@ -20,7 +20,6 @@ const UnreadBadge = () => {
 
     fetchUnreadCount();
 
-    // Polling untuk memperbarui jumlah pesan yang belum dibaca setiap 30 detik
     const interval = setInterval(fetchUnreadCount, 30000);
 
     return () => clearInterval(interval);

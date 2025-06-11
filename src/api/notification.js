@@ -1,7 +1,6 @@
 import api from './axios';
 
 const NotificationService = {
-  // Mendapatkan semua notifikasi pengguna
   getUserNotifications: async () => {
     try {
       const response = await api.get('/notifications');
@@ -11,7 +10,6 @@ const NotificationService = {
     }
   },
 
-  // Mendapatkan jumlah notifikasi yang belum dibaca
   getUnreadCount: async () => {
     try {
       const response = await api.get('/notifications/unread-count');
@@ -21,7 +19,6 @@ const NotificationService = {
     }
   },
 
-  // Menandai notifikasi sebagai sudah dibaca
   markAsRead: async (id) => {
     try {
       const response = await api.patch(`/notifications/${id}/read`);
@@ -31,7 +28,6 @@ const NotificationService = {
     }
   },
 
-  // Menandai semua notifikasi sebagai sudah dibaca
   markAllAsRead: async () => {
     try {
       const response = await api.patch('/notifications/mark-all-read');
@@ -41,7 +37,6 @@ const NotificationService = {
     }
   },
 
-  // Menghapus notifikasi
   deleteNotification: async (id) => {
     try {
       const response = await api.delete(`/notifications/${id}`);

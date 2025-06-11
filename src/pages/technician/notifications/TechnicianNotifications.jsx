@@ -9,7 +9,7 @@ const TechnicianNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // all, unread, read
+  const [filter, setFilter] = useState('all'); 
   const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ const TechnicianNotifications = () => {
       setLoading(true);
       setError(null);
       const data = await NotificationService.getUserNotifications();
-      // All notifications for technician (server should filter by user role)
       setNotifications(data);
     } catch (error) {
       console.error('Error fetching notifications:', error);

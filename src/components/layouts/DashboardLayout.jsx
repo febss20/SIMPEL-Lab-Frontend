@@ -130,7 +130,6 @@ const DashboardLayout = ({ children }) => {
           { name: 'Perawatan', path: '/technician/maintenance', icon: <MaintenanceIcon /> },
           { name: 'Perbaikan', path: '/technician/repairs', icon: <RepairsIcon /> },
           { name: 'Spare Part', path: '/technician/spare-parts', icon: <SparePartsIcon /> },
-          // Menghapus menu Pesan dari navigasi karena sudah ada tombol mengambang
         ];
       default:
         return [
@@ -140,7 +139,6 @@ const DashboardLayout = ({ children }) => {
           { name: 'Peralatan', path: '/user/equipment', icon: <EquipmentIcon /> },
           { name: 'Peminjaman', path: '/user/loans', icon: <LoansIcon /> },
           { name: 'Permintaan Peminjaman', path: '/user/request', icon: <RequestIcon /> },
-          // Menghapus menu Pesan dari navigasi karena sudah ada tombol mengambang
         ];
     }
   };

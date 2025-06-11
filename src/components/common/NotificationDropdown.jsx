@@ -15,7 +15,6 @@ const NotificationDropdown = ({
   const unreadNotifications = notifications.filter(notif => !notif.isRead);
   const hasUnread = unreadNotifications.length > 0;
   
-  // Determine the correct notifications route based on user role
   const getNotificationsRoute = () => {
     if (!currentUser?.role) return '/user/notifications';
     

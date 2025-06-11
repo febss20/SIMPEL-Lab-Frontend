@@ -14,7 +14,6 @@ const NotificationBell = () => {
     fetchUnreadCount();
     fetchNotifications();
     
-    // Polling setiap 30 detik untuk update notifikasi
     const interval = setInterval(() => {
       fetchUnreadCount();
       if (showDropdown) {
@@ -25,7 +24,6 @@ const NotificationBell = () => {
     return () => clearInterval(interval);
   }, [showDropdown]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

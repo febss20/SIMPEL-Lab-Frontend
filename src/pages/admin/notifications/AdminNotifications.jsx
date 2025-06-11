@@ -9,7 +9,7 @@ const AdminNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // all, unread, read
+  const [filter, setFilter] = useState('all');
   const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {

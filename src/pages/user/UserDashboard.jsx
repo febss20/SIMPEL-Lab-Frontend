@@ -22,13 +22,10 @@ const UserDashboard = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch user's loans
         const loansResponse = await axios.get(`/loans/user/${user.id}`);
         
-        // Fetch popular equipment
         const popularEquipmentResponse = await axios.get('/equipment/popular');
         
-        // Fetch user's lab bookings
         const labBookingsResponse = await axios.get('/lab-bookings/user');
 
         setLoans(loansResponse.data);
@@ -63,7 +60,6 @@ const UserDashboard = () => {
     }
   };
 
-  // Sort loans by status (APPROVED and PENDING first) and then by createdAt date
   const sortedLoans = [...loans].sort((a, b) => {
     const statusOrder = { APPROVED: 0, PENDING: 1, OVERDUE: 2, REJECTED: 3, RETURNED: 4 };
     const statusA = statusOrder[a.status] || 5;
@@ -74,12 +70,11 @@ const UserDashboard = () => {
     }
     
     return new Date(b.createdAt) - new Date(a.createdAt);
-  }).slice(0, 5); // Get only the first 5 loans
+  }).slice(0, 5); 
 
-  // Sort lab bookings by date (upcoming first)
   const sortedLabBookings = [...labBookings].sort((a, b) => {
     return new Date(a.date) - new Date(b.date);
-  }).filter(booking => new Date(booking.date) >= new Date()).slice(0, 3); // Get only upcoming bookings (max 3)
+  }).filter(booking => new Date(booking.date) >= new Date()).slice(0, 3);
 
   if (loading) {
     return (

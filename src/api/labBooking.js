@@ -35,13 +35,11 @@ export const getAvailableTimeSlots = async (labId, date) => {
   return response.data;
 };
 
-// Update booking (admin only)
 export const updateBooking = async (id, bookingData) => {
   const response = await api.put(`/lab-bookings/${id}`, bookingData);
   return response.data;
 };
 
-// Delete booking (admin only)
 export const deleteBooking = async (id) => {
   const response = await api.delete(`/lab-bookings/${id}`);
   return response.data;

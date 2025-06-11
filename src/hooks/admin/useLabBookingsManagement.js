@@ -192,7 +192,6 @@ export default function useLabBookingsManagement() {
   };
 
   return {
-    // Data states
     bookings,
     isLoading,
     error,
@@ -202,8 +201,7 @@ export default function useLabBookingsManagement() {
     setStatusFilter,
     filteredBookings,
     successMsg,
-    
-    // Modal states
+  
     showApproveModal,
     setShowApproveModal,
     showRejectModal,
@@ -220,7 +218,6 @@ export default function useLabBookingsManagement() {
     editForm,
     modalError,
     
-    // Handlers
     handleApprove,
     handleReject,
     handleEdit,

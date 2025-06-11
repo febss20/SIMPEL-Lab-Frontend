@@ -1,7 +1,6 @@
 import api from './axios';
 
 const MessageService = {
-  // Mendapatkan semua percakapan untuk pengguna saat ini
   getConversations: async () => {
     try {
       const response = await api.get('/messages/conversations');
@@ -11,7 +10,6 @@ const MessageService = {
     }
   },
 
-  // Mendapatkan percakapan dengan pengguna tertentu
   getConversation: async (userId) => {
     try {
       const response = await api.get(`/messages/conversation/${userId}`);
@@ -21,7 +19,6 @@ const MessageService = {
     }
   },
 
-  // Mengirim pesan
   sendMessage: async (receiverId, content) => {
     try {
       const response = await api.post('/messages', { receiverId, content });
@@ -31,7 +28,6 @@ const MessageService = {
     }
   },
 
-  // Mendapatkan jumlah pesan yang belum dibaca
   getUnreadCount: async () => {
     try {
       const response = await api.get('/messages/unread-count');
@@ -41,7 +37,6 @@ const MessageService = {
     }
   },
 
-  // Mendapatkan daftar teknisi untuk dihubungi
   getTechnicians: async () => {
     try {
       const response = await api.get('/messages/technicians');

@@ -33,7 +33,6 @@ import MaintenanceTaskDetail from './pages/technician/maintenance/MaintenanceTas
 import RepairDetail from './pages/technician/repairs/RepairDetail';
 import EquipmentDetailTechnician from './pages/technician/equipment/EquipmentDetail';
 
-// Lab Booking Pages
 import LabList from './pages/user/lab/LabList';
 import LabBooking from './pages/user/lab/LabBooking';
 import UserBookings from './pages/user/lab/UserBookings';

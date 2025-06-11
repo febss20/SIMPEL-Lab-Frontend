@@ -83,7 +83,6 @@ export default function useLoansManagement() {
     }
   };
 
-  // Handler untuk modal approve peminjaman
   const handleApprove = (id) => {
     setSelectedLoanId(id);
     setShowApproveModal(true);
@@ -105,7 +104,6 @@ export default function useLoansManagement() {
     }
   };
 
-  // Handler untuk modal reject peminjaman
   const handleReject = (id) => {
     setSelectedLoanId(id);
     setShowRejectModal(true);
@@ -129,7 +127,6 @@ export default function useLoansManagement() {
     }
   };
 
-  // Handler untuk modal approve perpanjangan
   const handleApproveExtend = (id) => {
     setSelectedLoanId(id);
     setShowApproveExtendModal(true);
@@ -151,7 +148,6 @@ export default function useLoansManagement() {
     }
   };
 
-  // Handler untuk modal reject perpanjangan
   const handleRejectExtend = (id) => {
     setSelectedLoanId(id);
     setShowRejectExtendModal(true);
@@ -301,7 +297,6 @@ export default function useLoansManagement() {
     exportToCSV,
     handleUpdateStatus,
     handleDecideExtend,
-    // Modal konfirmasi states
     showApproveModal,
     setShowApproveModal,
     showRejectModal,
@@ -311,7 +306,6 @@ export default function useLoansManagement() {
     setShowApproveExtendModal,
     showRejectExtendModal,
     setShowRejectExtendModal,
-    // Modal konfirmasi handlers
     handleApprove,
     confirmApprove,
     handleReject,
