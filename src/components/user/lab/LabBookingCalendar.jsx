@@ -97,8 +97,8 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
       return false;
     }
     
-    // Jika tidak ada data availableSlots, anggap tersedia
-    if (!availableSlots || availableSlots.length === 0) return true;
+    // Jika tidak ada data availableSlots, anggap tidak tersedia (loading state)
+    if (!availableSlots || availableSlots.length === 0) return false;
     
     // Cek setiap jam dalam durasi booking
     for (let i = 0; i < duration; i++) {
