@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { format, addDays, startOfWeek, isSameDay, parseISO } from 'date-fns';
+import { format, addDays, startOfWeek, isSameDay } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { getAvailableTimeSlots } from '../../../api/labBooking';
 
@@ -103,7 +103,8 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
       const checkSlot = `${checkHour.toString().padStart(2, '0')}:00`;
       
       const matchingSlot = availableSlots.find(availableSlot => {
-        const availableStartTime = format(parseISO(availableSlot.startTime), 'HH:mm');
+        const availableDate = new Date(availableSlot.startTime);
+        const availableStartTime = availableDate.getUTCHours().toString().padStart(2, '0') + ':00';
         return availableStartTime === checkSlot;
       });
       
