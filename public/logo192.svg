@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with gradient -->
+  <circle cx="96" cy="96" r="90" fill="url(#grad1)" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Lab flask/beaker -->
+  <path d="M72 48 L72 72 L48 120 L144 120 L120 72 L120 48 Z" fill="url(#grad2)" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+  
+  <!-- Flask neck -->
+  <rect x="84" y="36" width="24" height="24" fill="#ffffff" rx="3"/>
+  
+  <!-- Liquid inside flask -->
+  <path d="M60 108 L132 108 L123 90 L69 90 Z" fill="#ffffff" opacity="0.7"/>
+  
+  <!-- Bubbles for scientific effect -->
+  <circle cx="78" cy="96" r="6" fill="#ffffff" opacity="0.6"/>
+  <circle cx="108" cy="84" r="4.8" fill="#ffffff" opacity="0.5"/>
+  <circle cx="90" cy="102" r="3.6" fill="#ffffff" opacity="0.7"/>
+  <circle cx="114" cy="96" r="2.4" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- Modern accent lines -->
+  <line x1="36" y1="156" x2="156" y2="156" stroke="#ffffff" stroke-width="6" opacity="0.3"/>
+  <line x1="48" y1="168" x2="144" y2="168" stroke="#ffffff" stroke-width="3" opacity="0.2"/>
+  
+  <!-- Lab Manager text effect -->
+  <circle cx="96" cy="30" r="8" fill="url(#grad3)" opacity="0.8"/>
+  <circle cx="96" cy="162" r="6" fill="url(#grad3)" opacity="0.6"/>
+</svg>

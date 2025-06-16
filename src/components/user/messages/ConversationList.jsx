@@ -60,11 +60,12 @@ const ConversationList = ({ onSelectConversation, selectedUserId }) => {
 
   return (
     <div className="overflow-y-auto h-full">
-      <div className="flex justify-between items-center p-4 border-b">
-        <h2 className="text-lg font-semibold">Percakapan</h2>
+      <div className="flex justify-between items-center p-3 sm:p-4 border-b">
+        <h2 className="text-base sm:text-lg font-semibold">Percakapan</h2>
         <Link 
           to="/user/messages/new" 
-          className="text-blue-500 hover:text-blue-700"
+          className="text-blue-500 hover:text-blue-700 p-1"
+          title="Percakapan Baru"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
@@ -82,32 +83,32 @@ const ConversationList = ({ onSelectConversation, selectedUserId }) => {
           return (
             <li 
               key={conversation.user.id} 
-              className={`hover:bg-gray-50 cursor-pointer ${isSelected ? 'bg-blue-50' : ''}`}
+              className={`hover:bg-gray-50 cursor-pointer transition-colors ${isSelected ? 'bg-blue-50' : ''}`}
               onClick={() => onSelectConversation(conversation.user.id)}
             >
-              <div className="flex items-center px-4 py-3 relative">
+              <div className="flex items-center px-3 sm:px-4 py-3 relative">
                 <div className="flex-shrink-0">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                  <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 text-sm sm:text-base font-medium">
                     {conversation.user.fullName ? conversation.user.fullName.charAt(0).toUpperCase() : conversation.user.username.charAt(0).toUpperCase()}
                   </div>
                 </div>
-                <div className="ml-3 flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                <div className="ml-2 sm:ml-3 flex-1 min-w-0 pr-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-sm font-medium text-gray-900 truncate pr-2">
                       {conversation.user.fullName || conversation.user.username}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 flex-shrink-0">
                       {formattedDate}
                     </p>
                   </div>
-                  <p className="text-sm text-gray-500 truncate">
+                  <p className="text-xs sm:text-sm text-gray-500 truncate pr-6">
                     {conversation.lastMessage?.content || 'Belum ada pesan'}
                   </p>
                 </div>
                 {conversation.unreadCount > 0 && (
-                  <div className="absolute right-4 top-10 -translate-y-1/2">
-                    <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-blue-500 rounded-full shadow-md">
-                      {conversation.unreadCount}
+                  <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
+                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-blue-500 rounded-full">
+                      {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
                     </span>
                   </div>
                 )}

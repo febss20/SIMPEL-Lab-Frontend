@@ -204,13 +204,11 @@ const DashboardLayout = ({ children }) => {
             
             {/* Logo */}
             <span className="text-indigo-700 text-xl font-bold transition-all hover:scale-105 duration-300 flex items-center gap-3">
-              <div className="bg-indigo-100 p-2 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M6 2a1 1 0 00-1 1v2a1 1 0 00.293.707L9 9.414V15a3 3 0 106 0v-5.586l3.707-3.707A1 1 0 0017 5V3a1 1 0 00-1-1H6z" />
-                </svg>
+              <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-2 rounded-lg">
+                <img src="/favicon.svg" alt="Lab Manager Logo" className="h-8 w-8" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg">SIMPEL</span>
+                <span className="text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">SIMPEL</span>
                 <span className="text-sm text-gray-500 font-normal">Lab Manager</span>
               </div>
             </span>

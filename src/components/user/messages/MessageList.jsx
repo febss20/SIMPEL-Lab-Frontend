@@ -54,11 +54,11 @@ const MessageList = ({ messages, loading }) => {
   }, {});
 
   return (
-    <div className="flex-1 p-4 overflow-y-auto">
+    <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
       {Object.entries(groupedMessages).map(([date, dateMessages]) => (
         <div key={date}>
-          <div className="flex justify-center my-4">
-            <span className="px-3 py-1 bg-gray-100 text-gray-500 text-xs rounded-full">
+          <div className="flex justify-center my-3 sm:my-4">
+            <span className="px-2 sm:px-3 py-1 bg-gray-100 text-gray-500 text-xs rounded-full">
               {date}
             </span>
           </div>
@@ -73,18 +73,18 @@ const MessageList = ({ messages, loading }) => {
             return (
               <div 
                 key={message.id} 
-                className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'} mb-4`}
+                className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4 px-1`}
               >
                 {!isCurrentUser && (
-                  <div className="flex-shrink-0 mr-2">
-                    <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                  <div className="flex-shrink-0 mr-1 sm:mr-2">
+                    <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 text-xs sm:text-sm font-medium">
                       {message.sender.fullName ? message.sender.fullName.charAt(0).toUpperCase() : message.sender.username.charAt(0).toUpperCase()}
                     </div>
                   </div>
                 )}
                 
-                <div className={`max-w-xs lg:max-w-md ${isCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'} rounded-lg px-4 py-2 shadow`}>
-                  <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                <div className={`max-w-[280px] sm:max-w-xs lg:max-w-md ${isCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'} rounded-lg px-3 sm:px-4 py-2 shadow-sm`}>
+                  <p className="whitespace-pre-wrap break-words text-sm sm:text-base">{message.content}</p>
                   <p className={`text-xs ${isCurrentUser ? 'text-blue-100' : 'text-gray-500'} text-right mt-1`}>
                     {time}
                   </p>
