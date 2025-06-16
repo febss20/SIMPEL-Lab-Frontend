@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
 const LabBookingCard = ({ booking, onCancel }) => {
@@ -39,7 +39,8 @@ const LabBookingCard = ({ booking, onCancel }) => {
 
   const formatDate = (dateString) => {
     try {
-      return format(parseISO(dateString), 'EEEE, d MMMM yyyy', { locale: id });
+      const date = new Date(dateString);
+      return format(date, 'EEEE, d MMMM yyyy', { locale: id });
     } catch (error) {
       console.error('Error formatting date:', error);
       return dateString || 'Tanggal tidak valid';
@@ -48,7 +49,10 @@ const LabBookingCard = ({ booking, onCancel }) => {
 
   const formatTime = (dateString) => {
     try {
-      return format(parseISO(dateString), 'HH:mm', { locale: id });
+      const date = new Date(dateString);
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
     } catch (error) {
       console.error('Error formatting time:', error);
       return '';
@@ -103,7 +107,7 @@ const LabBookingCard = ({ booking, onCancel }) => {
 
         <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
           <div className="text-xs text-gray-500">
-            Dibuat pada: {format(parseISO(booking.createdAt), 'dd/MM/yyyy HH:mm', { locale: id })}
+            Dibuat pada: {format(new Date(booking.createdAt), 'dd/MM/yyyy HH:mm', { locale: id })}
           </div>
           
           {canCancel && (
