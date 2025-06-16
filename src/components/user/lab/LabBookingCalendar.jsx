@@ -92,22 +92,27 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
     const [hours] = slot.split(':').map(Number);
     const endHour = hours + duration;
     
+    // Cek apakah booking melebihi jam operasional
     if (endHour > 17) {
       return false;
     }
     
+    // Jika tidak ada data availableSlots, anggap tersedia
     if (!availableSlots || availableSlots.length === 0) return true;
     
+    // Cek setiap jam dalam durasi booking
     for (let i = 0; i < duration; i++) {
       const checkHour = hours + i;
       const checkSlot = `${checkHour.toString().padStart(2, '0')}:00`;
       
-      const isSlotFree = availableSlots.some(availableSlot => {
+      // Cari slot yang sesuai dalam availableSlots
+      const matchingSlot = availableSlots.find(availableSlot => {
         const availableStartTime = format(parseISO(availableSlot.startTime), 'HH:mm');
         return availableStartTime === checkSlot;
       });
       
-      if (!isSlotFree) {
+      // Jika slot tidak ditemukan ATAU tidak tersedia, return false
+      if (!matchingSlot || !matchingSlot.isAvailable) {
         return false;
       }
     }
