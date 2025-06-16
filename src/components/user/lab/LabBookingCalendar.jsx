@@ -57,12 +57,12 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
   const handleSlotClick = (slot) => {
     const isAvailable = isSlotAvailable(slot, selectedDuration);
     if (isAvailable) {
-      const selectedDateTime = new Date(selectedDate);
+      const selectedDateTime = new Date(selectedDate.toISOString().split('T')[0] + 'T00:00:00.000Z');
       const [hours, minutes] = slot.split(':').map(Number);
-      selectedDateTime.setHours(hours, minutes, 0, 0);
+      selectedDateTime.setUTCHours(hours, minutes, 0, 0);
       
       const endDateTime = new Date(selectedDateTime);
-      endDateTime.setHours(hours + selectedDuration, minutes, 0, 0);
+      endDateTime.setUTCHours(hours + selectedDuration, minutes, 0, 0);
       
       const endHour = hours + selectedDuration;
       const formattedEnd = `${endHour.toString().padStart(2, '0')}:00`;
@@ -92,26 +92,21 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
     const [hours] = slot.split(':').map(Number);
     const endHour = hours + duration;
     
-    // Cek apakah booking melebihi jam operasional
     if (endHour > 17) {
       return false;
     }
     
-    // Jika tidak ada data availableSlots, anggap tidak tersedia (loading state)
     if (!availableSlots || availableSlots.length === 0) return false;
     
-    // Cek setiap jam dalam durasi booking
     for (let i = 0; i < duration; i++) {
       const checkHour = hours + i;
       const checkSlot = `${checkHour.toString().padStart(2, '0')}:00`;
       
-      // Cari slot yang sesuai dalam availableSlots
       const matchingSlot = availableSlots.find(availableSlot => {
         const availableStartTime = format(parseISO(availableSlot.startTime), 'HH:mm');
         return availableStartTime === checkSlot;
       });
       
-      // Jika slot tidak ditemukan ATAU tidak tersedia, return false
       if (!matchingSlot || !matchingSlot.isAvailable) {
         return false;
       }

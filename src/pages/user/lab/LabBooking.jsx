@@ -84,8 +84,8 @@ const LabBooking = () => {
     try {
       const bookingData = {
         labId: parseInt(labId),
-        startTime: selectedTimeSlot.startTime,
-        endTime: selectedTimeSlot.endTime,
+        startTime: selectedTimeSlot.startTime.toISOString(),
+        endTime: selectedTimeSlot.endTime.toISOString(),
         purpose: form.purpose === 'LAINNYA' ? form.customPurpose : form.purpose,
         participantCount: parseInt(form.participantCount),
         notes: form.notes
