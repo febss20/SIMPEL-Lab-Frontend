@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import DashboardLayout from '../../../components/layouts/DashboardLayout';
 import DataTable from '../../../components/dashboard/DataTable';
@@ -72,13 +72,21 @@ const LabBookingsManagement = () => {
       id: 'startTime', 
       header: 'Mulai', 
       sortable: true, 
-      render: row => row.startTime ? format(parseISO(row.startTime), 'dd MMM yyyy HH:mm', { locale: id }) : '-' 
+      render: row => {
+        if (!row.startTime) return '-';
+        const date = new Date(row.startTime);
+        return format(date, 'dd MMM yyyy HH:mm', { locale: id });
+      }
     },
     { 
       id: 'endTime', 
       header: 'Selesai', 
       sortable: true, 
-      render: row => row.endTime ? format(parseISO(row.endTime), 'dd MMM yyyy HH:mm', { locale: id }) : '-' 
+      render: row => {
+        if (!row.endTime) return '-';
+        const date = new Date(row.endTime);
+        return format(date, 'dd MMM yyyy HH:mm', { locale: id });
+      }
     },
     { 
       id: 'purpose', 

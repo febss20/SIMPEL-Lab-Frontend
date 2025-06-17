@@ -57,12 +57,13 @@ const LabBookingCalendar = ({ labId, onSelectTimeSlot }) => {
   const handleSlotClick = (slot) => {
     const isAvailable = isSlotAvailable(slot, selectedDuration);
     if (isAvailable) {
-      const selectedDateTime = new Date(selectedDate.toISOString().split('T')[0] + 'T00:00:00.000Z');
+      const selectedDateTime = new Date(selectedDate);
       const [hours, minutes] = slot.split(':').map(Number);
-      selectedDateTime.setUTCHours(hours, minutes, 0, 0);
+  
+      selectedDateTime.setHours(hours, minutes, 0, 0);
       
       const endDateTime = new Date(selectedDateTime);
-      endDateTime.setUTCHours(hours + selectedDuration, minutes, 0, 0);
+      endDateTime.setHours(hours + selectedDuration, minutes, 0, 0);
       
       const endHour = hours + selectedDuration;
       const formattedEnd = `${endHour.toString().padStart(2, '0')}:00`;

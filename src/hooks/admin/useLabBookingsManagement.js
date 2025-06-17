@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { getAllBookings, updateBookingStatus, deleteBooking } from '../../api/labBooking';
 
@@ -172,12 +172,12 @@ export default function useLabBookingsManagement() {
       item.id,
       item.user?.fullName || item.user?.username || '-',
       item.lab?.name || '-',
-      item.startTime ? format(parseISO(item.startTime), 'dd MMM yyyy HH:mm', { locale: id }) : '-',
-      item.endTime ? format(parseISO(item.endTime), 'dd MMM yyyy HH:mm', { locale: id }) : '-',
+      item.startTime ? format(new Date(item.startTime), 'dd MMM yyyy HH:mm', { locale: id }) : '-',
+      item.endTime ? format(new Date(item.endTime), 'dd MMM yyyy HH:mm', { locale: id }) : '-',
       item.purpose || '-',
       item.participantCount || '-',
       item.status,
-      item.createdAt ? format(parseISO(item.createdAt), 'dd MMM yyyy HH:mm', { locale: id }) : '-'
+      item.createdAt ? format(new Date(item.createdAt), 'dd MMM yyyy HH:mm', { locale: id }) : '-'
     ]);
     let csvContent = 'data:text/csv;charset=utf-8,' +
       headers.join(',') + '\n' +

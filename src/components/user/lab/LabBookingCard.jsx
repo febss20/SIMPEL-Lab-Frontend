@@ -50,9 +50,7 @@ const LabBookingCard = ({ booking, onCancel }) => {
   const formatTime = (dateString) => {
     try {
       const date = new Date(dateString);
-      const hours = date.getUTCHours().toString().padStart(2, '0');
-      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
+      return format(date, 'HH:mm');
     } catch (error) {
       console.error('Error formatting time:', error);
       return '';
