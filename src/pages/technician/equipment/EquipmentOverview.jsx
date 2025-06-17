@@ -85,7 +85,7 @@ const EquipmentOverview = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-6 py-8 bg-gray-50 min-h-screen">
+      <div className="py-6 bg-gray-50 min-h-screen">
         <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg mb-8 p-6 text-white animate-fadeIn">
           <div className="flex items-center">
             <div className="mr-4 bg-white bg-opacity-20 p-3 rounded-full">
@@ -367,4 +367,4 @@ const EquipmentOverview = () => {
   );
 };
 
-export default EquipmentOverview; 
+export default EquipmentOverview;

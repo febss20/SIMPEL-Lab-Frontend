@@ -366,4 +366,4 @@ const RepairDetail = () => {
   );
 };
 
-export default RepairDetail; 
+export default RepairDetail;

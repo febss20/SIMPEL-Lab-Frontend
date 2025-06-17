@@ -161,4 +161,4 @@ const EquipmentDetail = () => {
   );
 };
 
-export default EquipmentDetail; 
+export default EquipmentDetail;

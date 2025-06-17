@@ -90,28 +90,30 @@ const MaintenanceTasks = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-6 py-8 bg-gray-50 min-h-screen">
+      <div className="py-6 bg-gray-50 min-h-screen">
         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg mb-8 p-6 text-white animate-fadeIn">
-          <div className="flex items-center">
-            <div className="mr-4 bg-white bg-opacity-20 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
+          <div className="flex items-center flex-wrap gap-4">
+            <div className="flex items-center">
+              <div className="mr-4 bg-white bg-opacity-20 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h1 className="text-2xl sm:text-3xl font-bold">Pemeliharaan</h1>
+                <p className="opacity-80 text-sm sm:text-base">Mengelola semua jadwal dan aktivitas pemeliharaan peralatan</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold">Pemeliharaan</h1>
-              <p className="opacity-80">Mengelola semua jadwal dan aktivitas pemeliharaan peralatan</p>
-            </div>
-            <div className="ml-auto flex gap-2 items-center">
+            <div className="ml-auto">
               <button
-                className="px-4 py-2 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 btn-pulse flex items-center"
+                className="px-3 py-2 sm:px-4 sm:py-2 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 btn-pulse flex items-center justify-center min-w-0"
                 onClick={() => setShowCreateModal(true)}
                 title="Jadwalkan Pemeliharaan"
               >
-                <svg className="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                Jadwalkan Pemeliharaan
+                <span className="hidden sm:inline ml-2">Jadwalkan Pemeliharaan</span>
               </button>
             </div>
           </div>
@@ -451,4 +453,4 @@ const MaintenanceTasks = () => {
   );
 };
 
-export default MaintenanceTasks; 
+export default MaintenanceTasks;

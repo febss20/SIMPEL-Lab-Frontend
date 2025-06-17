@@ -8,7 +8,7 @@ const BookingFilters = ({
   exportToCSV 
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 items-stretch sm:items-center w-full">
+    <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 items-stretch sm:items-center w-full sm:w-auto">
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 w-full sm:w-auto">
         <select
           value={statusFilter}

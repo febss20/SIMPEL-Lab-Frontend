@@ -102,7 +102,7 @@ const MaintenanceTaskDetail = () => {
   if (error) {
     return (
       <DashboardLayout>
-        <div className="max-w-4xl mx-auto mt-8 px-4">
+        <div className="max-w-4xl mx-auto mt-8 px-4 bg-gray-50 min-h-screen">
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md animate-fadeIn">
             <div className="flex items-center">
               <svg className="h-6 w-6 mr-3 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -303,4 +303,4 @@ const MaintenanceTaskDetail = () => {
   );
 };
 
-export default MaintenanceTaskDetail; 
+export default MaintenanceTaskDetail;

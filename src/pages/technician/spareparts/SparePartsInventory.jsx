@@ -45,7 +45,7 @@ const SparePartsInventory = () => {
 
   return (
     <DashboardLayout>
-      <div className="px-6 py-8 bg-gray-50 min-h-screen">
+      <div className="py-6 bg-gray-50 min-h-screen">
         <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg p-6 mb-8 flex justify-between items-center animate-fadeIn">
           <div className="flex items-center text-white">
             <div className="mr-4 bg-white bg-opacity-20 p-3 rounded-full">
@@ -293,4 +293,4 @@ const SparePartsInventory = () => {
   );
 };
 
-export default SparePartsInventory; 
+export default SparePartsInventory;
