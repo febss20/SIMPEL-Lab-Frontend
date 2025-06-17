@@ -105,50 +105,56 @@ const EquipmentManagement = () => {
               </svg>
             }
           />
-          <div className="flex gap-2 items-center">
-            <input
-              type="text"
-              placeholder="Cari peralatan..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            <select
-              className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
-            >
-              <option value="">Semua Status</option>
-              <option value="AVAILABLE">Available</option>
-              <option value="IN_USE">In Use</option>
-              <option value="UNDER_MAINTENANCE">Under Maintenance</option>
-              <option value="UNDER_REPAIR">Under Repair</option>
-              <option value="INACTIVE">Inactive</option>
-            </select>
-            <button
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-1 transition-colors"
-              onClick={exportToCSV}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-              CSV
-            </button>
-            <Link to="/admin/confirm-unrepairable" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-1 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-1.414 1.414A9 9 0 105.636 18.364l1.414-1.414A7 7 0 1116.95 7.05z" />
-              </svg>
-              Konfirmasi Rusak Permanen
-            </Link>
-            <button 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-1 transition-colors"
-              onClick={() => handleOpenModal()}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Tambah Peralatan
-            </button>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 items-stretch sm:items-center w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 w-full sm:w-auto">
+              <input
+                type="text"
+                placeholder="Cari peralatan..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto"
+              />
+              <select
+                className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto"
+                value={statusFilter}
+                onChange={e => setStatusFilter(e.target.value)}
+              >
+                <option value="">Semua Status</option>
+                <option value="AVAILABLE">Available</option>
+                <option value="IN_USE">In Use</option>
+                <option value="UNDER_MAINTENANCE">Under Maintenance</option>
+                <option value="UNDER_REPAIR">Under Repair</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            </div>
+            <div className="flex gap-2">
+              <button
+                className="bg-green-600 hover:bg-green-700 text-white px-2 sm:px-3 py-2 rounded-md shadow-sm flex items-center justify-center gap-1 transition-colors flex-1 sm:flex-none text-sm"
+                onClick={exportToCSV}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+                <span className="hidden sm:inline">CSV</span>
+              </button>
+              <Link to="/admin/confirm-unrepairable" className="bg-red-600 hover:bg-red-700 text-white px-2 sm:px-3 py-2 rounded-md shadow-sm flex items-center justify-center gap-1 transition-colors flex-1 sm:flex-none text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-1.414 1.414A9 9 0 105.636 18.364l1.414-1.414A7 7 0 1116.95 7.05z" />
+                </svg>
+                <span className="hidden sm:inline">Konfirmasi</span>
+                <span className="sm:hidden">Rusak</span>
+              </Link>
+              <button 
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-2 sm:px-3 py-2 rounded-md shadow-sm flex items-center justify-center gap-1 transition-colors flex-1 sm:flex-none text-sm"
+                onClick={() => handleOpenModal()}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                </svg>
+                <span className="hidden sm:inline">Tambah</span>
+                <span className="sm:hidden">+</span>
+              </button>
+            </div>
           </div>
         </div>
         {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
